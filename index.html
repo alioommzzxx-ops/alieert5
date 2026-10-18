@@ -257,9 +257,7 @@ footer{margin-top:28px;text-align:center}
 
 <script type="text/plain" id="workerSrc">
 // WEB EXTRACTOR PRO — Cloudflare Worker (وسيط CORS آمن)
-// الصق هذا الكود كاملاً في Cloudflare ← Workers & Pages ← Create ← Hello World ← Edit code ← Deploy.
-// اختياري: ضع رابط موقعك على GitHub Pages هنا ليستخدم الوسيط موقعك فقط (مثال: "https://username.github.io")
-const ALLOWED_ORIGIN = "";
+const ALLOWED_ORIGIN = "https://alioommzzxx-ops.github.io";
 
 const MAX_BYTES = 25 * 1024 * 1024;
 const MAX_REDIRECTS = 5;
@@ -286,8 +284,8 @@ function fail(origin, status, code, detail = "") {
 function badHost(h) {
   h = h.toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "");
   if (BLOCKED_HOST.test(h)) return true;
-  if (h.includes(":")) return true; // IPv6 literals غير مسموحة
-  if (/^[\d.]+$/.test(h) || /^0x[0-9a-f]+$/i.test(h)) return true; // IP literals بكل صيغها
+  if (h.includes(":")) return true;
+  if (/^[\d.]+$/.test(h) || /^0x[0-9a-f]+$/i.test(h)) return true;
   return !h.includes(".");
 }
 
@@ -302,7 +300,6 @@ function validate(raw) {
 }
 
 function cookieInfo(resp) {
-  // أسماء الكوكيز وأعلامها فقط — لا تُرسَل القيم أبداً
   let list = [];
   try { list = resp.headers.getSetCookie ? resp.headers.getSetCookie() : []; } catch { /* ignore */ }
   return list.slice(0, 30).map((c) => {
@@ -394,9 +391,9 @@ export default {
 };
 </script>
 <script>
-/* ============ إعدادات المطوّر (عدّل هنا فقط) ============ */
+/* ============ إعدادات المطوّر (تم تضمين رابط الـ Worker تلقائياً) ============ */
 const DEV = { name: "المطوّر", name_en: "The Developer", year: new Date().getFullYear() };
-const WORKER_URL = ""; /* اختياري: ضع رابط الـ Worker هنا ليصير افتراضياً، أو أدخله من الواجهة */
+const WORKER_URL = "https://icy-rice-75de.alioommzzxx.workers.dev";
 
 const I18N={
 ar:{headline:"استخرج ملفات الويب بسهولة",sub:"أدخل رابط أي موقع وستجمع المنصة ملفاته العامة داخل متصفحك، وتعرض لك السيرفر المستخدم وقاعدة البيانات المذكورة علناً والتقنيات وترويسات الحماية — كله في بطاقات، مع زر تنزيل لكل ملف.",
@@ -411,10 +408,10 @@ rights:y=>`© ${y} جميع الحقوق محفوظة للمطوّر 👀`,devPi
 st:{pending:"بالانتظار",downloading:"جارٍ التنزيل",done:"تم",failed:"فشل",skipped:"تم تخطيه"},
 state:{done:"اكتملت",cancelled:"أُوقفت",error:"خطأ"},
 ph:{start:"بدء العملية…",robots:"قراءة robots.txt…",discover:e=>`فحص الصفحات (${e.n}/${e.of})…`,render:"فحص بعد العرض بالمتصفح الآلي…",download:e=>`تنزيل الملفات (${e.n}/${e.of})…`},
-done:{done:"اكتمل الفحص.",cancelled:"أُوقفت العملية. الملفات المنزّلة حتى الآن متاحة.",error:"توقفت العملية بسبب خطأ."},
-setupT:"⚙️ إعداد الوسيط Cloudflare Worker (مرة واحدة فقط)",wCopy:"نسخ كود الـ Worker",wSave:"حفظ واختبار",wOk:"✓ الـ Worker يعمل",wBad:"✗ تعذّر الوصول — تأكد من الرابط",wCopied:"تم نسخ الكود",
-wSteps:["افتح <code>dash.cloudflare.com</code> ← Workers & Pages ← Create ← Hello World ← Deploy.","اضغط <b>Edit code</b>، احذف الكود كله، ثم اضغط «نسخ كود الـ Worker» أدناه والصقه، ثم <b>Deploy</b>.","انسخ رابط الـ Worker (ينتهي بـ <code>workers.dev</code>) والصقه في الحقل أدناه ثم «حفظ واختبار».","اختياري للحماية: ضع رابط موقعك على GitHub Pages في <code>ALLOWED_ORIGIN</code> داخل الكود ليقبل الوسيط موقعك فقط."],
-needWorker:"أدخل رابط Cloudflare Worker أولاً (الإعداد بالأعلى).",zipping:"جارٍ إنشاء ZIP…",zipFail:"تعذّر إنشاء ZIP.",workerHint:"تحقق من رابط الـ Worker في الإعداد.",
+done:{done:"اكتمل الفحص.",cancelled:"أُوقفت العملية. الملفات المنزّلة حتى الآن متاحة.",error:"توقفت العملية بسببخطأ."},
+setupT:"⚙️ إعداد الوسيط Cloudflare Worker (مضبوط مسبقاً ✔)",wCopy:"نسخ كود الـ Worker",wSave:"حفظ واختبار",wOk:"✓ الـ Worker يعمل",wBad:"✗ تعذّر الوصول — تأكد من الرابط",wCopied:"تم نسخ الكود",
+wSteps:["الوسيط مضبوط مسبقاً ويعمل تلقائياً مع رابطك الثابت."],
+needWorker:"أدخل رابط Cloudflare Worker أولاً.",zipping:"جارٍ إنشاء ZIP…",zipFail:"تعذّر إنشاء ZIP.",workerHint:"تحقق من اتصال الإنترنت.",
 err:{empty:"أدخل رابط الموقع أولاً.",bad_url:"الرابط غير صالح.",no_worker:"لم يُضبط رابط الـ Worker.",forbidden:"الـ Worker يرفض هذا الموقع (ALLOWED_ORIGIN).",worker:"ردّ غير متوقع من الـ Worker",http_error:"رفض الخادم الطلب",too_large:"تجاوز الحجم الأقصى",timeout:"انتهت المهلة",network:"خطأ في الاتصال",unsafe:"رابط غير آمن (محظور)",robots:"ممنوع حسب robots.txt",limit_total:"تجاوز الحد الإجمالي للحجم",
  too_many_redirects:"تحويلات كثيرة",redirect_bad:"تحويل غير صالح",write_failed:"تعذّر حفظ الملف",unsafe_path:"مسار غير آمن",internal:"خطأ داخلي",cancelled:"أُلغي",job_timeout:"انتهى الوقت الكلي للعملية"},
 note:{limit_files:"تم بلوغ الحد الأقصى لعدد الملفات؛ بعض الموارد لم تُضَف.",render_unavailable:"المتصفح الآلي غير مثبّت على الخادم؛ تم الاكتفاء بالفحص العادي.",render_failed:"فشل الفحص بعد العرض؛ تم الاكتفاء بالفحص العادي."},
@@ -429,7 +426,7 @@ dbNote:"تُستنتج فقط من المراجع العلنية داخل الأ
 secScore:"درجة الحماية",present:"موجود",missing:"مفقود",
 cats:{cms:"نظام إدارة محتوى",framework:"إطار عمل",library:"مكتبة",ui:"واجهة",server:"خادم",language:"لغة",cdn:"CDN",hosting:"استضافة",cache:"تخزين مؤقت",analytics:"تحليلات",security:"أمان",payments:"مدفوعات",pwa:"PWA",ecommerce:"متجر",builder:"منشئ مواقع"},
 noTech:"لم تُكتشف تقنيات.",noCookies:"لم يرسل الخادم أي كوكيز.",noExt:"لا مضيفات خارجية.",noApi:"لم تُعثر على مسارات API.",
-kinds:{cdn:"CDN",hosting:"استضافة",cache:"تخزين مؤقت"},filesIn:"ملف",analyzing:"جارٍ التحليل…"},
+kinds:{cdn:"CDN",hosting:"استضافة",cache:"تعخزين مؤقت"},filesIn:"ملف",analyzing:"جارٍ التحليل…"},
 en:{headline:"Extract web files with ease",sub:"Enter any website URL and the platform collects its public files and shows the server used, any publicly-referenced database, the tech stack and security headers — all in cards, with a download button for every file.",
 start:"Start scan & collect",stop:"Stop",options:"Advanced options",maxPages:"Max pages",maxDepth:"Link depth",maxFiles:"Max files",maxMb:"Max file size (MB)",
 robots:"Respect robots.txt",render:"Post-render scan with headless browser (experimental)",
@@ -443,9 +440,9 @@ st:{pending:"Pending",downloading:"Downloading",done:"Done",failed:"Failed",skip
 state:{done:"Completed",cancelled:"Stopped",error:"Error"},
 ph:{start:"Starting…",robots:"Reading robots.txt…",discover:e=>`Scanning pages (${e.n}/${e.of})…`,render:"Post-render scan…",download:e=>`Downloading files (${e.n}/${e.of})…`},
 done:{done:"Scan complete.",cancelled:"Job stopped. Files downloaded so far are available.",error:"The job stopped because of an error."},
-setupT:"⚙️ Cloudflare Worker proxy setup (one time)",wCopy:"Copy Worker code",wSave:"Save & test",wOk:"✓ Worker is running",wBad:"✗ Unreachable — check the URL",wCopied:"Code copied",
-wSteps:["Open <code>dash.cloudflare.com</code> → Workers & Pages → Create → Hello World → Deploy.","Tap <b>Edit code</b>, delete everything, tap “Copy Worker code” below and paste it, then <b>Deploy</b>.","Copy the Worker URL (ends with <code>workers.dev</code>), paste it below and tap “Save & test”.","Optional hardening: put your GitHub Pages URL in <code>ALLOWED_ORIGIN</code> inside the code so only your site can use the proxy."],
-needWorker:"Enter your Cloudflare Worker URL first (setup above).",zipping:"Building ZIP…",zipFail:"Could not build the ZIP.",workerHint:"Check the Worker URL in the setup.",
+setupT:"⚙️ Cloudflare Worker proxy setup (pre-configured ✔)",wCopy:"Copy Worker code",wSave:"Save & test",wOk:"✓ Worker is running",wBad:"✗ Unreachable — check the URL",wCopied:"Code copied",
+wSteps:["The worker is pre-configured and works automatically."],
+needWorker:"Enter your Cloudflare Worker URL first.",zipping:"Building ZIP…",zipFail:"Could not build the ZIP.",workerHint:"Check your connection.",
 err:{empty:"Please enter a website URL.",bad_url:"The URL is not valid.",no_worker:"Worker URL is not set.",forbidden:"The Worker rejects this site (ALLOWED_ORIGIN).",worker:"Unexpected Worker response",http_error:"Server rejected the request",too_large:"Exceeds max size",timeout:"Timed out",network:"Connection error",unsafe:"Unsafe URL (blocked)",robots:"Disallowed by robots.txt",limit_total:"Total size limit reached",
  too_many_redirects:"Too many redirects",redirect_bad:"Invalid redirect",write_failed:"Could not save file",unsafe_path:"Unsafe path",internal:"Internal error",cancelled:"Cancelled",job_timeout:"Job time limit reached"},
 note:{limit_files:"File limit reached; some resources were not added.",render_unavailable:"Headless browser is not installed on the server; normal scan only.",render_failed:"Post-render scan failed; normal scan only."},
@@ -684,7 +681,7 @@ const HOSTING=[
  ["Fly.io","hosting",h=>"fly-request-id" in h],
  ["Render","hosting",h=>"x-render-origin-server" in h||"rndr-id" in h],
  ["Heroku","hosting",h=>(h.via||"").toLowerCase().includes("heroku")],
- ["Railway","hosting",h=>"x-railway-request-id" in h||(h.server||"").toLowerCase().includes("railway")],
+ ["Railway","hosting",h=>"x-railway-request-id" in h||(h.server||"").toLowerCase()==="railway"],
  ["Sucuri","cdn",h=>"x-sucuri-id" in h],
  ["Varnish","cache",h=>"x-varnish" in h||(h.via||"").toLowerCase().includes("varnish")]];
 const HTML_TECH=[["/wp-content/|/wp-includes/|wp-json", "WordPress", "cms"], ["/sites/default/files|drupal-settings-json", "Drupal", "cms"], ["/media/jui/|com_content|joomla", "Joomla", "cms"], ["cdn\\.shopify\\.com|Shopify\\.theme", "Shopify", "ecommerce"], ["static\\.wixstatic\\.com|wix\\.com", "Wix", "builder"], ["static1\\.squarespace\\.com|squarespace", "Squarespace", "builder"], ["assets\\.website-files\\.com|data-wf-page", "Webflow", "builder"], ["/_next/static|__NEXT_DATA__", "Next.js", "framework"], ["/_nuxt/|__NUXT__", "Nuxt", "framework"], ["ng-version=|<app-root", "Angular", "framework"], ["data-reactroot|react-dom|__REACT_DEVTOOLS|react\\.production", "React", "library"], ["vue(\\.runtime)?(\\.min)?\\.js|data-v-[0-9a-f]{6,}|__VUE__", "Vue.js", "library"], ["svelte-[a-z0-9]{4,}|/_app/immutable", "Svelte/SvelteKit", "framework"], ["astro-island|/_astro/", "Astro", "framework"], ["___gatsby|gatsby-", "Gatsby", "framework"], ["jquery[.\\-/][\\d.]*(min\\.)?js|jQuery\\.fn", "jQuery", "library"], ["bootstrap(\\.bundle)?(\\.min)?\\.(css|js)|class=\\\"[^\\\"]*\\b(container-fluid|btn-primary)\\b", "Bootstrap", "ui"], ["tailwind|class=\\\"[^\\\"]*\\b(flex items-center|text-gray-\\d00|bg-gray-\\d00)\\b", "Tailwind CSS", "ui"], ["font-?awesome|fa-solid|fontawesome", "Font Awesome", "ui"], ["fonts\\.googleapis\\.com|fonts\\.gstatic\\.com", "Google Fonts", "ui"], ["googletagmanager\\.com", "Google Tag Manager", "analytics"], ["google-analytics\\.com|gtag\\(|G-[A-Z0-9]{6,}", "Google Analytics", "analytics"], ["connect\\.facebook\\.net|fbq\\(", "Meta Pixel", "analytics"], ["static\\.hotjar\\.com", "Hotjar", "analytics"], ["cloudflareinsights\\.com", "Cloudflare Web Analytics", "analytics"], ["plausible\\.io|umami", "Privacy Analytics", "analytics"], ["google\\.com/recaptcha|gstatic\\.com/recaptcha", "reCAPTCHA", "security"], ["hcaptcha\\.com", "hCaptcha", "security"], ["challenges\\.cloudflare\\.com|turnstile", "Cloudflare Turnstile", "security"], ["stripe\\.com/v3|js\\.stripe\\.com", "Stripe", "payments"], ["paypal\\.com/sdk", "PayPal", "payments"], ["socket\\.io", "Socket.IO", "library"], ["leaflet", "Leaflet (Maps)", "library"], ["maps\\.googleapis\\.com", "Google Maps", "library"], ["chart(\\.min)?\\.js|chart\\.umd", "Chart.js", "library"], ["serviceWorker\\.register|workbox", "Service Worker / PWA", "pwa"], ["<link[^>]+rel=[\\\"']manifest", "Web App Manifest", "pwa"]];
@@ -866,7 +863,7 @@ async function start(){
   if(!raw){showErr(lang==="ar"?"أدخل رابط الموقع أولاً.":"Please enter a website URL.");return}
   if(!getW()){showErr(T.needWorker);$("#setupD").open=true;$("#setup").scrollIntoView({behavior:"smooth"});return}
   let url;try{url=normalizeUrl(raw)}catch(e){showErr(errText(e.code));return}
-  const o={max_pages:Math.min(50,+$("#oPages").value||10),max_depth:Math.min(3,+$("#oDepth").value||0),max_files:Math.min(500,+$("#oFiles").value||200),max_file_mb:Math.min(25,+$("#oMb").value||10),respect_robots:$("#oRobots").checked};
+  const o={max_pages:Math.min(50,+$("#oPages").value||10),max_depth:Math.min(3,+$("#oDepth").value\vert{}\vert{}0),max_files:Math.min(500,+$("#oFiles").value||200),max_file_mb:Math.min(25,+$("#oMb").value\vert{}\vert{}10),respect_robots:$("#oRobots").checked};
   job={id:"local",url};files=new Map();stats=null;filter="all";query="";$("#q").value="";open.clear();info=null;lastPhase=lastDone=null;
   setStats({discovered:0,downloaded:0,failed:0,size:0});setPct(0);$("#phase").textContent=T.ph.start;
   $("#run").hidden=false;$("#res").hidden=false;$("#zipBtn").classList.add("off");$("#jsonBtn").classList.add("off");
@@ -894,7 +891,7 @@ $("#url").addEventListener("keydown",e=>{if(e.key==="Enter")start()});
 $("#stopBtn").onclick=()=>{if(ctl)ctl.abort()};
 $("#newBtn").onclick=()=>{if(ctl)ctl.abort();runId++;store.forEach(s=>{});files.forEach(f=>{if(f.obj)URL.revokeObjectURL(f.obj)});job=null;info=null;files=new Map();setRunning(false);$("#run").hidden=$("#res").hidden=true;renderInfo();showErr("");$("#url").value="";$("#url").focus();lastPhase=lastDone=null};
 $("#zipBtn").onclick=e=>{e.preventDefault();if(!$("#zipBtn").classList.contains("off"))makeZip()};
-$("#jsonBtn").onclick=e=>{e.preventDefault();if(!$("#jsonBtn").classList.contains("off"))saveJson()};
+jsonBtn.onclick=e=>{e.preventDefault();if(!$("#jsonBtn").classList.contains("off"))saveJson()};
 $("#copyBtn").onclick=async()=>{if(!job)return;const t=reportText();
   try{await navigator.clipboard.writeText(t)}catch{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}toast(T.copied)};
 
