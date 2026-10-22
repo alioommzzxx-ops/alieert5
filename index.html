@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070816">
+<title>WEB EXTRACTOR PRO</title>
+<style>
+:root{--bg:#070816;--p:#7c3aed;--b:#38bdf8;--ok:#34d399;--bad:#fb7185;--warn:#fbbf24;--tx:#e8eaf6;--mut:#9aa3c7;
+--glass:rgba(255,255,255,.055);--line:rgba(255,255,255,.11);--r:18px;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--tx);font-family:"Segoe UI","Noto Sans Arabic",Tahoma,system-ui,sans-serif;min-height:100vh;line-height:1.6;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(60% 50% at 85% 0%,rgba(124,58,237,.35),transparent),radial-gradient(50% 45% at 0% 30%,rgba(56,189,248,.22),transparent),radial-gradient(60% 50% at 50% 100%,rgba(99,102,241,.22),transparent)}
+.bg i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.45;animation:fl 14s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:280px;height:280px;background:var(--p);top:10%;left:-60px}
+.bg i:nth-child(2){width:240px;height:240px;background:var(--b);bottom:8%;right:-50px;animation-delay:-6s}
+@keyframes fl{to{transform:translate(40px,-30px) scale(1.15)}}
+.wrap{max-width:1120px;margin:0 auto;padding:16px 14px 40px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 2px 18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+.logo{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--p),var(--b));box-shadow:0 0 24px rgba(124,58,237,.55)}
+.brand span b{background:linear-gradient(90deg,#c4b5fd,var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hdr-r{display:flex;align-items:center;gap:8px}
+.dev-pill{font-size:.78rem;padding:6px 12px;min-height:36px;border-radius:99px;color:#e9d5ff;border-color:rgba(167,139,250,.45);background:rgba(124,58,237,.18)}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.card{padding:18px;margin-top:16px}
+.hero{text-align:center;padding:14px 4px 4px}
+.hero h1{font-size:clamp(1.7rem,6vw,2.7rem);line-height:1.25;background:linear-gradient(90deg,#fff,#c4b5fd 50%,var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);margin:10px auto 0;max-width:640px}
+button,.btn{font:inherit;cursor:pointer;border:1px solid var(--line);color:var(--tx);background:rgba(255,255,255,.07);border-radius:12px;padding:10px 14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:.2s;min-height:44px}
+button:hover,.btn:hover{background:rgba(255,255,255,.13);transform:translateY(-1px)}
+button:disabled,.btn.off{opacity:.45;pointer-events:none}
+.primary{background:linear-gradient(135deg,var(--p),#4f46e5 60%,var(--b));border-color:transparent;font-weight:700;box-shadow:0 6px 24px rgba(99,102,241,.45)}
+.danger{border-color:rgba(251,113,133,.5);color:#fecdd3}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.urlrow{display:flex;gap:10px;flex-wrap:wrap}
+.urlrow input{flex:1 1 260px;min-width:0;font:inherit;color:var(--tx);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:12px 14px;direction:ltr;text-align:left;outline:none;min-height:48px}
+.urlrow input:focus,.search:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(56,189,248,.18)}
+.err{color:#fecdd3;background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.35);border-radius:12px;padding:10px 12px;margin-top:12px}
+details{color:var(--mut)}
+summary{cursor:pointer;padding:6px 0}
+.opts-d{margin-top:12px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:8px}
+.opts label{display:flex;flex-direction:column;gap:4px;font-size:.85rem}
+.opts input[type=number]{font:inherit;color:var(--tx);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.opts .ck{flex-direction:row;align-items:center;gap:8px}
+.bar{height:12px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:12px 0}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--b));border-radius:99px;transition:width .35s;box-shadow:0 0 14px rgba(56,189,248,.6)}
+.status{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px}
+.stat{padding:12px;text-align:center;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.stat b{display:block;font-size:1.5rem;direction:ltr}
+.stat span{color:var(--mut);font-size:.82rem}
+
+/* ===== بطاقات المعلومات ===== */
+.sec-t{display:flex;align-items:center;gap:10px;margin:26px 2px 4px;font-size:1.15rem}
+.sec-t small{color:var(--mut);font-weight:400;font-size:.85rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px;margin-top:12px}
+.ic{position:relative;padding:18px;border-radius:var(--r);background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 10px 40px rgba(0,0,0,.3);overflow:hidden;animation:pop .45s ease both}
+.ic::before{content:"";position:absolute;inset-inline:0;top:0;height:3px;background:linear-gradient(90deg,var(--c1,var(--p)),var(--c2,var(--b)))}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}}
+.ic.wide{grid-column:1/-1}
+.ic h3{display:flex;align-items:center;gap:10px;font-size:1.02rem;margin-bottom:12px}
+.ic h3 .ico{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--c1,var(--p)),var(--c2,var(--b)));color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+.kv{display:grid;grid-template-columns:minmax(90px,36%) 1fr;gap:6px 12px;font-size:.9rem}
+.kv dt{color:var(--mut)}
+.kv dd{margin:0;word-break:break-word;direction:ltr;text-align:start}
+.kv dd.rtl{direction:inherit}
+.mono{font-family:var(--mono);font-size:.82rem}
+.badges{display:flex;gap:6px;flex-wrap:wrap}
+.bd{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;padding:3px 10px;border-radius:99px;background:rgba(56,189,248,.14);color:#bae6fd;border:1px solid rgba(56,189,248,.3);direction:ltr}
+.bd.ok{background:rgba(52,211,153,.14);color:var(--ok);border-color:rgba(52,211,153,.35)}
+.bd.bad{background:rgba(251,113,133,.14);color:var(--bad);border-color:rgba(251,113,133,.35)}
+.bd.warn{background:rgba(251,191,36,.14);color:var(--warn);border-color:rgba(251,191,36,.35)}
+.bd.pur{background:rgba(124,58,237,.22);color:#ddd6fe;border-color:rgba(167,139,250,.4)}
+.big{font-size:1.5rem;font-weight:800;direction:ltr;text-align:start;word-break:break-all}
+.sub{color:var(--mut);font-size:.84rem}
+.note{color:var(--mut);font-size:.82rem;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.empty{color:var(--mut);padding:8px 0}
+.dbrow{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);margin-bottom:8px}
+.dbrow b{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.dbrow code{direction:ltr;text-align:start;font-family:var(--mono);font-size:.8rem;color:#bae6fd;word-break:break-all}
+.techgrp{margin-bottom:10px}
+.techgrp>span{display:block;font-size:.76rem;color:var(--mut);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.sec-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.ring{--v:0;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(var(--rc,var(--ok)) calc(var(--v)*1%),rgba(255,255,255,.1) 0)}
+.ring b{width:72px;height:72px;border-radius:50%;background:#0d0f26;display:grid;place-items:center;font-size:1.3rem;direction:ltr}
+.shl{flex:1 1 180px;display:flex;flex-direction:column;gap:5px;font-size:.84rem}
+.shl div{display:flex;justify-content:space-between;gap:8px;direction:ltr}
+.tbl{width:100%;border-collapse:collapse;font-size:.84rem;direction:ltr;text-align:left}
+.tbl td,.tbl th{padding:5px 8px;border-bottom:1px dashed var(--line);text-align:start;word-break:break-all}
+.tbl th{color:var(--mut);font-weight:600}
+.scroll{max-height:260px;overflow:auto}
+pre.raw{direction:ltr;text-align:left;font-family:var(--mono);font-size:.76rem;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:380px;overflow:auto;white-space:pre-wrap;word-break:break-all;color:#cbd5ff;margin-top:8px}
+.chain{direction:ltr;text-align:left;font-size:.8rem;color:var(--mut);margin-top:6px}
+
+/* ===== الملفات ===== */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 8px}
+.chip{padding:6px 12px;min-height:36px;font-size:.85rem;border-radius:99px}
+.chip.on{background:linear-gradient(135deg,var(--p),var(--b));border-color:transparent}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.search{flex:1 1 220px;font:inherit;color:var(--tx);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:9px 12px;outline:none;min-height:44px}
+.files{align-items:start;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:12px}
+.fc{--c1:var(--p);--c2:var(--b);padding:14px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:.2s}
+.fc:hover{border-color:rgba(167,139,250,.5);transform:translateY(-2px)}
+.fc::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:3px;background:linear-gradient(var(--c1),var(--c2))}
+.fc-top{display:flex;gap:12px;align-items:center}
+.fi{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.fi svg{width:22px;height:22px}
+.fn{min-width:0;flex:1}
+.fn b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:start;font-weight:650}
+.fn small{display:block;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:start;font-size:.76rem}
+.fm{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{font-size:.7rem;text-transform:uppercase;padding:3px 8px;border-radius:8px;background:rgba(124,58,237,.3);border:1px solid rgba(124,58,237,.5);direction:ltr}
+.sz{color:var(--mut);font-size:.85rem;direction:ltr;white-space:nowrap}
+.pill{font-size:.78rem;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill.done{background:rgba(52,211,153,.15);color:var(--ok)}
+.pill.failed{background:rgba(251,113,133,.15);color:var(--bad)}
+.pill.skipped{background:rgba(251,191,36,.15);color:var(--warn)}
+.pill.pending,.pill.downloading{background:rgba(56,189,248,.15);color:var(--b)}
+.fa{display:flex;gap:8px}
+.fa .btn,.fa button{flex:1;min-height:40px;padding:6px 10px;font-size:.88rem}
+.fa .btn.dl{background:linear-gradient(135deg,var(--p),#4f46e5 60%,var(--b));border-color:transparent;font-weight:700}
+.fa button.sm{flex:0 0 auto}
+.fe{color:#fecdd3;font-size:.82rem}
+.fd{border-top:1px dashed var(--line);padding-top:10px}
+.fd .kv{font-size:.82rem}
+.steps{padding-inline-start:22px;color:var(--mut);font-size:.9rem;margin-top:8px}.steps li{margin:5px 0}.steps code{direction:ltr;unicode-bidi:embed;font-family:var(--mono);font-size:.82rem;color:#bae6fd}
+.notice h3{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.notice ul{padding-inline-start:20px;color:var(--mut);font-size:.9rem}
+.hist{display:flex;flex-direction:column;gap:6px;color:var(--mut);font-size:.88rem}
+.hist div{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;direction:ltr;padding:6px 0;border-bottom:1px dashed var(--line)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#12142e;border:1px solid var(--line);padding:10px 16px;border-radius:12px;z-index:9;max-width:92vw}
+[hidden]{display:none!important}
+footer{margin-top:28px;text-align:center}
+.dev{position:relative;overflow:hidden;display:inline-flex;flex-direction:column;gap:5px;align-items:center;padding:18px 30px;border-radius:22px;background:linear-gradient(135deg,rgba(124,58,237,.25),rgba(56,189,248,.16));border:1px solid rgba(167,139,250,.48);box-shadow:0 12px 38px rgba(124,58,237,.24),inset 0 1px 0 rgba(255,255,255,.12)}
+.dev:before{content:"✦  ✧  ✦";font-size:.8rem;letter-spacing:5px;color:#a5f3fc;text-shadow:0 0 14px rgba(56,189,248,.8)}
+.dev b{font-size:1.15rem;font-weight:900;letter-spacing:.25px;background:linear-gradient(90deg,#fff,#c4b5fd,var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.dev span{color:#cbd5e1;font-size:.82rem}
+.dev:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.06) 50%,transparent 75%)}
+.use{color:var(--mut);font-size:.8rem;margin-bottom:14px}
+@media(max-width:640px){.grid,.files{grid-template-columns:1fr}.dev-pill{display:none}.kv{grid-template-columns:minmax(80px,38%) 1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== Live Preview ===== */
+#pv{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#pv[hidden]{display:none}
+.pvbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.05)}
+.pvbar button,.pvbar select{min-height:38px;padding:4px 10px;font:inherit;color:var(--tx);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:10px}
+.pvbar select{max-width:200px;direction:ltr}.pvbar button.on{background:var(--p)}
+.pvbar label{font-size:.8rem;color:var(--mut);display:flex;gap:4px;align-items:center}
+#pvStage{flex:1;min-height:0;display:flex;justify-content:center;overflow:auto;padding:8px}
+#pvFrame{background:#fff;border:1px solid var(--line);border-radius:10px;width:100%;height:100%}
+#pvDbg{max-height:28vh;overflow:auto;font:12px var(--mono);direction:ltr;text-align:left;padding:8px;border-top:1px solid var(--line);background:rgba(0,0,0,.4)}
+#pvDbg div{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.06)}#pvDbg .e{color:var(--bad)}#pvDbg .w{color:var(--warn)}#pvDbg .i{color:var(--ok)}
+
+#pj{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:14px}#pj[hidden]{display:none}
+#pj .pjbox{width:min(560px,100%);max-height:80vh;overflow:auto;padding:16px}
+.pji{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line)}
+.pji small{display:block;color:var(--mut);direction:ltr;text-align:start}.pji button{min-height:38px;padding:4px 10px}
+
+.rt input,.rt select{font:inherit;color:var(--tx);background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-height:44px;min-width:0;direction:ltr;text-align:left}
+.rt input{flex:1 1 240px}.rt select{flex:1 1 160px;max-width:100%}
+.rt pre{direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all;max-height:260px;overflow:auto;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:12px;padding:10px;font:12px var(--mono);margin-top:8px}
+.rt table{width:100%;direction:ltr;font:12px var(--mono);border-collapse:collapse;margin-top:8px}.rt td{padding:3px 6px;border-bottom:1px solid var(--line);vertical-align:top;word-break:break-all}.rt td:first-child{color:var(--b);white-space:nowrap}
+.tr details{margin-inline-start:14px}.tr summary{color:var(--tx)}.tr .tf{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:4px 0 4px 14px;direction:ltr;text-align:left;border-bottom:1px solid rgba(255,255,255,.05)}.tr .tf span{word-break:break-all}.tr .tf a,.tr .tf button{min-height:34px;padding:2px 10px}
+
+.fa{flex-wrap:wrap}
+#ed{position:fixed;inset:0;z-index:55;background:var(--bg);display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}#ed[hidden]{display:none}
+#edV,#edT{flex:1;min-height:0;margin:0;padding:12px;overflow:auto;direction:ltr;text-align:left;font:12.5px/1.6 var(--mono);white-space:pre;color:var(--tx);background:rgba(0,0,0,.35);border:0;resize:none;tab-size:2}
+#edT{outline:none;white-space:pre;overflow-wrap:normal}
+.hc{color:#6b7599}.hs{color:#86efac}.hn{color:#fbbf24}.hk{color:#c4b5fd}.ht{color:#38bdf8}
+#pvStage.split{flex-wrap:wrap;gap:8px}#pvStage.split #pvFrame{flex:1 1 320px;min-height:45%}
+#pvSrc{flex:1 1 320px;min-height:40%;margin:0;overflow:auto;direction:ltr;text-align:left;font:12px/1.5 var(--mono);white-space:pre;background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:10px;padding:10px}
+.dbar{display:flex;align-items:center;gap:8px;margin:5px 0;direction:ltr;font-size:.82rem}.dbar b{width:62px;flex:none}.dbar i{display:block;height:12px;border-radius:99px;background:linear-gradient(90deg,var(--p),var(--b));min-width:3px}.dbar span{color:var(--mut);white-space:nowrap}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-pkg" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></symbol>
+<symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/></symbol>
+<symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+<symbol id="i-cookie" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9 4 4 0 0 0 5 5 3 3 0 0 0 4 4z"/><path d="M8.5 10h.01M12 15h.01M15.5 16.5h.01M8 15h.01"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></symbol>
+<symbol id="i-code" viewBox="0 0 24 24"><path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></symbol>
+<symbol id="i-img" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.7"/><path d="M21 16l-5-5-8 9"/></symbol>
+<symbol id="i-font" viewBox="0 0 24 24"><path d="M5 20L12 4l7 16M8 14h8"/></symbol>
+<symbol id="i-json" viewBox="0 0 24 24"><path d="M9 4C6 4 7 8 5 9c2 1 1 5 4 5M15 4c3 0 2 4 4 5-2 1-1 5-4 5M9 20h.01M15 20h.01"/></symbol>
+<symbol id="i-play2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10 9l5 3-5 3z"/></symbol>
+<symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-braces" viewBox="0 0 24 24"><path d="M8 3H7a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2 2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2 2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-1"/></symbol>
+</defs></svg>
+<div class="bg"><i></i><i></i></div>
+<div class="wrap">
+<header>
+  <div class="brand"><div class="logo"><svg class="i"><use href="#i-shield"/></svg></div><span>WEB EXTRACTOR <b>PRO</b></span></div>
+  <div class="hdr-r"><button id="zipImp" type="button" class="dev-pill">📦 <span></span></button><button id="pjOpen" type="button" class="dev-pill">📂 <span></span></button><span class="dev-pill btn" id="devPill" style="cursor:default"></span><button id="langBtn" type="button" aria-label="Language">EN</button></div>
+</header>
+
+<section class="hero"><h1 data-t="headline"></h1><p data-t="sub"></p></section>
+
+<section id="setup" class="card glass" hidden style="display:none!important">
+  <details id="setupD"><summary data-t="setupT" style="font-weight:700;color:var(--tx)"></summary>
+    <ol id="wSteps" class="steps"></ol>
+    <div class="row" style="margin-top:10px"><button id="wCopy" type="button" class="primary"><svg class="i"><use href="#i-copy"/></svg><span data-t="wCopy"></span></button></div>
+    <div class="urlrow" style="margin-top:12px"><input id="wUrl" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://xxxx.workers.dev"><button id="wSave" type="button"><span data-t="wSave"></span></button><span id="wStat" class="sub"></span></div>
+  </details>
+</section>
+
+<section class="card glass">
+  <div class="urlrow">
+    <input id="url" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://example.com">
+    <button id="startBtn" class="primary" type="button"><svg class="i"><use href="#i-play"/></svg><span data-t="start"></span></button>
+    <button id="pauseBtn" type="button" disabled>⏸ <span></span></button>
+    <button id="stopBtn" class="danger" type="button" disabled><svg class="i"><use href="#i-stop"/></svg><span data-t="stop"></span></button>
+  </div>
+  <div id="err" class="err" hidden></div>
+  <details class="opts-d">
+    <summary data-t="options"></summary>
+    <div class="opts">
+      <label><span data-t="maxPages"></span><input id="oPages" type="number" min="1" max="50" value="10"></label>
+      <label><span data-t="maxDepth"></span><input id="oDepth" type="number" min="0" max="3" value="1"></label>
+      <label><span data-t="maxFiles"></span><input id="oFiles" type="number" min="1" max="500" value="200"></label>
+      <label><span data-t="maxMb"></span><input id="oMb" type="number" min="1" max="25" value="10"></label>
+      <label class="ck"><input id="oRobots" type="checkbox" checked><span data-t="robots"></span></label>
+    </div>
+  </details>
+</section>
+
+<section id="run" class="card glass" hidden>
+  <div class="status"><span id="phase"></span><b id="pct" dir="ltr">0%</b></div>
+  <div class="bar"><div id="fill"></div></div>
+  <div class="stats">
+    <div class="stat"><b id="sD">0</b><span data-t="sDisc"></span></div>
+    <div class="stat"><b id="sO" style="color:var(--ok)">0</b><span data-t="sDown"></span></div>
+    <div class="stat"><b id="sF" style="color:var(--bad)">0</b><span data-t="sFail"></span></div>
+    <div class="stat"><b id="sS">0 B</b><span data-t="sSize"></span></div>
+  </div>
+</section>
+
+<!-- بطاقات معلومات الموقع -->
+<section id="infoSec" hidden>
+  <h2 class="sec-t"><svg class="i"><use href="#i-info"/></svg><span data-t="infoT"></span><small data-t="infoSub"></small></h2>
+  <div id="infoGrid" class="grid"></div>
+</section>
+
+<!-- الملفات -->
+<section id="res" hidden>
+  <h2 class="sec-t"><svg class="i"><use href="#i-pkg"/></svg><span data-t="filesT"></span></h2>
+  <div class="card glass" style="margin-top:12px">
+    <div class="row">
+      <a id="zipBtn" class="btn primary off" href="#"><svg class="i"><use href="#i-pkg"/></svg><span data-t="zipAll"></span></a>
+      <a id="jsonBtn" class="btn off" href="#"><svg class="i"><use href="#i-braces"/></svg><span data-t="jsonAll"></span></a>
+      <button id="copyBtn" type="button"><svg class="i"><use href="#i-copy"/></svg><span data-t="copyRep"></span></button>
+      <button id="pvBtn" type="button" class="primary">▶ <span id="pvBtnT"></span></button>
+      <button id="rtAll" type="button">↻ <span></span></button>
+      <button id="dashBtn" type="button">📊 <span></span></button>
+      <button id="trBtn" type="button">🌳 <span></span></button>
+      <button id="pjSave" type="button">💾 <span></span></button>
+      <button id="newBtn" type="button"><svg class="i"><use href="#i-plus"/></svg><span data-t="newOp"></span></button>
+    </div>
+    <div class="tools"><input id="q" class="search" type="search" data-ph="searchPh" autocomplete="off"></div>
+    <div id="chips" class="chips"></div>
+    <div id="list" class="files"></div>
+  </div>
+</section>
+
+<section class="card glass rt" id="rtCard">
+  <h3>🧪 <span id="rtT"></span></h3>
+  <p class="sub" id="rtD" style="color:var(--mut);margin:6px 0 10px"></p>
+  <div class="row"><input id="rtUrl" type="url" placeholder="https://example.com/path" autocomplete="off"><select id="rtSel"></select>
+  <input id="rtN" type="number" min="0" value="1" inputmode="numeric" placeholder="∞" style="flex:0 0 96px"><input id="rtG" type="number" min="300" max="60000" value="1000" inputmode="numeric" style="flex:0 0 96px"><button id="rtGo" type="button" class="primary"><span id="rtGoT"></span></button></div>
+  <div id="rtOut"></div>
+</section>
+
+<section class="card glass notice">
+  <h3><svg class="i"><use href="#i-shield"/></svg><span data-t="noticeT"></span></h3>
+  <ul id="noticeL"></ul>
+</section>
+
+<section class="card glass">
+  <h3 data-t="histT" style="margin-bottom:8px"></h3>
+  <div id="hist" class="hist"></div>
+</section>
+
+<footer>
+  <p class="use" data-t="footer"></p>
+  <div class="dev"><b id="devName"></b><span id="devRights"></span></div>
+</footer>
+</div>
+<div id="toast" class="toast" hidden></div>
+
+<script type="text/plain" id="workerSrc">
+// WEB EXTRACTOR PRO — Cloudflare Worker (وسيط CORS آمن)
+// الصق هذا الكود كاملاً في Cloudflare ← Workers & Pages ← Create ← Hello World ← Edit code ← Deploy.
+// اختياري: ضع رابط موقعك على GitHub Pages هنا ليستخدم الوسيط موقعك فقط (مثال: "https://username.github.io")
+const ALLOWED_ORIGIN = "";
+
+const MAX_BYTES = 25 * 1024 * 1024;
+const MAX_REDIRECTS = 5;
+const PORTS = new Set(["", "80", "443", "8080", "8443"]);
+const UA = "WebExtractorPro/2.0 (public-resources collector)";
+const BLOCKED_HOST = /^(localhost|metadata|instance-data|.*\.(local|localhost|internal|intranet|lan|home|corp|workers\.dev))$/i;
+
+function cors(origin) {
+  return {
+    "Access-Control-Allow-Origin": ALLOWED_ORIGIN || origin || "*",
+    "Access-Control-Expose-Headers": "x-proxy-meta, x-proxy-error, x-proxy-detail",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+function fail(origin, status, code, detail = "") {
+  return new Response(null, {
+    status,
+    headers: { ...cors(origin), "x-proxy-error": code, "x-proxy-detail": String(detail).slice(0, 100) },
+  });
+}
+
+function badHost(h) {
+  h = h.toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "");
+  if (BLOCKED_HOST.test(h)) return true;
+  if (h.includes(":")) return true; // IPv6 literals غير مسموحة
+  if (/^[\d.]+$/.test(h) || /^0x[0-9a-f]+$/i.test(h)) return true; // IP literals بكل صيغها
+  return !h.includes(".");
+}
+
+function validate(raw) {
+  let u;
+  try { u = new URL(raw); } catch { return null; }
+  if (u.protocol !== "http:" && u.protocol !== "https:") return null;
+  if (u.username || u.password) return null;
+  if (!PORTS.has(u.port)) return null;
+  if (badHost(u.hostname)) return null;
+  return u;
+}
+
+function cookieInfo(resp) {
+  // أسماء الكوكيز وأعلامها فقط — لا تُرسَل القيم أبداً
+  let list = [];
+  try { list = resp.headers.getSetCookie ? resp.headers.getSetCookie() : []; } catch { /* ignore */ }
+  return list.slice(0, 30).map((c) => {
+    const parts = c.split(";").map((p) => p.trim());
+    const low = parts.slice(1).map((p) => p.toLowerCase());
+    const ss = low.find((p) => p.startsWith("samesite="));
+    return {
+      name: parts[0].split("=")[0].slice(0, 60),
+      secure: low.includes("secure"),
+      httponly: low.includes("httponly"),
+      samesite: ss ? ss.split("=")[1] : "—",
+    };
+  });
+}
+
+function limiter(max) {
+  let n = 0;
+  return new TransformStream({
+    transform(chunk, ctl) {
+      n += chunk.byteLength;
+      if (n > max) ctl.error(new Error("too_large"));
+      else ctl.enqueue(chunk);
+    },
+  });
+}
+
+export default {
+  async fetch(req, env) {
+    const origin = req.headers.get("Origin") || "";
+    const allowed = (env && env.ALLOWED_ORIGIN) || ALLOWED_ORIGIN;
+    if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
+    if (allowed && origin !== allowed) return fail(origin, 403, "forbidden");
+
+    const q = new URL(req.url).searchParams;
+    const target = q.get("url");
+    if (!target) return new Response("WEB EXTRACTOR PRO worker is running ✔", { headers: cors(origin) });
+    let cur = validate(target);
+    if (!cur) return fail(origin, 400, "unsafe");
+    const max = Math.min(parseInt(q.get("max") || "", 10) || MAX_BYTES, MAX_BYTES);
+    const accept = q.get("a") === "h" ? "text/html,application/xhtml+xml,*/*;q=0.8" : "*/*";
+
+    const t0 = Date.now();
+    const chain = [];
+    let resp = null;
+    try {
+      for (let i = 0; i <= MAX_REDIRECTS; i++) {
+        resp = await fetch(cur.toString(), {
+          redirect: "manual",
+          headers: { "User-Agent": UA, Accept: accept },
+          cf: { cacheTtl: 0 },
+        });
+        if ([301, 302, 303, 307, 308].includes(resp.status)) {
+          const loc = resp.headers.get("location");
+          if (!loc) return fail(origin, 502, "redirect_bad");
+          chain.push({ url: cur.toString(), status: resp.status });
+          const next = validate(new URL(loc, cur).toString());
+          if (!next) return fail(origin, 400, "unsafe");
+          cur = next;
+          resp = null;
+          continue;
+        }
+        break;
+      }
+    } catch (e) {
+      return fail(origin, 502, "network", e && e.message);
+    }
+    if (!resp) return fail(origin, 502, "too_many_redirects");
+
+    const headers = {};
+    let size = 0;
+    for (const [k, v] of resp.headers) {
+      if (/^(set-cookie|cookie|authorization)$/i.test(k)) continue;
+      const val = v.slice(0, 200);
+      size += k.length + val.length;
+      if (size < 5000) headers[k.toLowerCase()] = val;
+    }
+    const meta = {
+      final_url: cur.toString(), status: resp.status, headers, chain,
+      cookies: cookieInfo(resp), ms: Date.now() - t0,
+    };
+    const out = { ...cors(origin), "x-proxy-meta": encodeURIComponent(JSON.stringify(meta)),
+      "Content-Type": "application/octet-stream", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" };
+
+    const cl = parseInt(resp.headers.get("content-length") || "", 10);
+    if (resp.status >= 400 || !resp.body) return new Response(null, { status: 200, headers: out });
+    if (cl > max) return fail(origin, 413, "too_large");
+    return new Response(resp.body.pipeThrough(limiter(max)), { status: 200, headers: out });
+  },
+};
+</script>
+<div id="pv" hidden>
+ <div class="pvbar">
+  <button id="pvX" type="button">✕</button><button id="pvR" type="button" title="Reload">⟳</button>
+  <select id="pvSel"></select>
+  <button id="pvS" type="button">&lt;/&gt;</button><button data-w="390" type="button">📱</button><button data-w="768" type="button">▭</button><button data-w="100%" class="on" type="button">🖥</button>
+  <button id="pvF" type="button">⛶</button><button id="pvD" type="button">Debug</button>
+  <label><input id="pvNet" type="checkbox" checked> <span id="pvNetT"></span></label>
+ </div>
+ <div id="pvStage"><iframe id="pvFrame" sandbox="allow-scripts allow-forms allow-popups" title="preview"></iframe><pre id="pvSrc" hidden></pre></div>
+ <div id="pvDbg" hidden></div>
+</div>
+<div id="pj" hidden><div class="glass pjbox"><div class="row" style="justify-content:space-between;align-items:center"><h3 id="pjT"></h3><button id="pjX" type="button">✕</button></div><div id="pjL"></div></div></div>
+<div id="ed" hidden>
+ <div class="pvbar"><button id="edX" type="button">✕</button><b id="edN" style="direction:ltr;max-width:40vw;overflow:hidden;text-overflow:ellipsis"></b>
+  <button id="edM" type="button"></button><button id="edF" type="button">{ }</button><button id="edSv" type="button" class="primary">💾</button><button id="edC" type="button">⧉</button></div>
+ <div id="edI" style="padding:4px 12px;font-size:.8rem;color:var(--mut);direction:ltr;text-align:left"></div>
+ <pre id="edV"></pre><textarea id="edT" hidden spellcheck="false"></textarea>
+</div>
+<input id="zipIn" type="file" accept=".zip,application/zip" hidden>
+<script>
+/* ============ إعدادات المطوّر (عدّل هنا فقط) ============ */
+const DEV = { name: "علاوي", name_en: "ALAWI", year: new Date().getFullYear() };
+const WORKER_URL = "https://icy-rice-75de.alioommzzxx.workers.dev"; /* رابط Cloudflare Worker الافتراضي */
+
+const I18N={
+ar:{headline:"استخرج ملفات الويب بسهولة",sub:"أدخل رابط أي موقع وستجمع المنصة ملفاته العامة داخل متصفحك، وتعرض لك السيرفر المستخدم وقاعدة البيانات المذكورة علناً والتقنيات وترويسات الحماية — كله في بطاقات، مع زر تنزيل لكل ملف.",
+start:"بدء الفحص والسحب",stop:"إيقاف العملية",options:"خيارات متقدمة",maxPages:"أقصى عدد صفحات",maxDepth:"عمق الروابط",maxFiles:"أقصى عدد ملفات",maxMb:"أقصى حجم للملف (MB)",
+robots:"احترام robots.txt",render:"فحص بعد العرض بمتصفح آلي (تجريبي)",
+sDisc:"ملفات مكتشفة",sDown:"تم تنزيلها",sFail:"فشلت",sSize:"الحجم الإجمالي",zipAll:"تنزيل الكل ZIP",jsonAll:"تنزيل التحليل JSON",copyRep:"نسخ تقرير النتائج",newOp:"عملية جديدة",
+all:"الكل",dl:"تنزيل",noFiles:"لا توجد ملفات لعرضها.",searchPh:"ابحث باسم الملف أو الرابط…",details:"التفاصيل",hide:"إخفاء",
+infoT:"معلومات الموقع",infoSub:"مستخلصة من الاستجابات العامة فقط",filesT:"الملفات المستخرجة",
+noticeT:"حدود الأداة",noticeL:["تعمل الأداة بالكامل داخل متصفحك، وتجلب المواقع عبر Cloudflare Worker الخاص بك. الملفات لا تُرفع لأي خادم غيره.","تجمع الأداة الموارد العامة التي يمكن الوصول إليها فقط.","السيرفر والتقنيات تُستنتج من ترويسات الاستجابة والأكواد العامة (فحص سلبي) — لا اختراق ولا فحص منافذ.","قاعدة البيانات تُعرض فقط إن كانت مذكورة علناً داخل أكواد الواجهة (مثل Supabase/Firebase). قاعدة البيانات الخلفية الخاصة لا يمكن معرفتها.","لا تُستخرج أي مفاتيح أو كلمات مرور أو توكنات؛ تُعرض أسماء المضيفين العامة وأسماء الكوكيز فقط.","لا تتجاوز أنظمة الحماية. وrobots.txt وحده ليس ضماناً قانونياً — راجع شروط الموقع قبل الاستخدام.","لا تُنفَّذ أي أكواد JavaScript منزّلة. حدود الحماية: 120MB إجمالاً لحماية ذاكرة الجوال."],
+histT:"سجل العمليات (هذه الجلسة)",noHist:"لا عمليات سابقة بعد.",footer:"استخدم الأداة فقط على مواقع تملكها أو لديك إذن بجمع ملفاتها.",
+rights:y=>`© ${y} ✦ جميع الحقوق محفوظة لـ علاوي ✦ صُنع بشغف`,devPill:"✦ المطوّر:",
+st:{pending:"بالانتظار",downloading:"جارٍ التنزيل",done:"تم",failed:"فشل",skipped:"تم تخطيه"},
+state:{done:"اكتملت",cancelled:"أُوقفت",error:"خطأ"},
+ph:{start:"بدء العملية…",robots:"قراءة robots.txt…",discover:e=>`فحص الصفحات (${e.n}/${e.of})…`,render:"فحص بعد العرض بالمتصفح الآلي…",download:e=>`تنزيل الملفات (${e.n}/${e.of})…`},
+done:{done:"اكتمل الفحص.",cancelled:"أُوقفت العملية. الملفات المنزّلة حتى الآن متاحة.",error:"توقفت العملية بسبب خطأ."},
+setupT:"⚙️ إعداد الوسيط Cloudflare Worker (مرة واحدة فقط)",wCopy:"نسخ كود الـ Worker",wSave:"حفظ واختبار",wOk:"✓ الـ Worker يعمل",wBad:"✗ تعذّر الوصول — تأكد من الرابط",wCopied:"تم نسخ الكود",
+wSteps:["افتح <code>dash.cloudflare.com</code> ← Workers & Pages ← Create ← Hello World ← Deploy.","اضغط <b>Edit code</b>، احذف الكود كله، ثم اضغط «نسخ كود الـ Worker» أدناه والصقه، ثم <b>Deploy</b>.","انسخ رابط الـ Worker (ينتهي بـ <code>workers.dev</code>) والصقه في الحقل أدناه ثم «حفظ واختبار».","اختياري للحماية: ضع رابط موقعك على GitHub Pages في <code>ALLOWED_ORIGIN</code> داخل الكود ليقبل الوسيط موقعك فقط."],
+needWorker:"أدخل رابط Cloudflare Worker أولاً (الإعداد بالأعلى).",zipping:"جارٍ إنشاء ZIP…",zipFail:"تعذّر إنشاء ZIP.",workerHint:"تحقق من رابط الـ Worker في الإعداد.",
+err:{empty:"أدخل رابط الموقع أولاً.",bad_url:"الرابط غير صالح.",no_worker:"لم يُضبط رابط الـ Worker.",forbidden:"الـ Worker يرفض هذا الموقع (ALLOWED_ORIGIN).",worker:"ردّ غير متوقع من الـ Worker",http_error:"رفض الخادم الطلب",too_large:"تجاوز الحجم الأقصى",timeout:"انتهت المهلة",network:"خطأ في الاتصال",unsafe:"رابط غير آمن (محظور)",robots:"ممنوع حسب robots.txt",limit_total:"تجاوز الحد الإجمالي للحجم",
+ too_many_redirects:"تحويلات كثيرة",redirect_bad:"تحويل غير صالح",write_failed:"تعذّر حفظ الملف",unsafe_path:"مسار غير آمن",internal:"خطأ داخلي",cancelled:"أُلغي",job_timeout:"انتهى الوقت الكلي للعملية"},
+note:{limit_files:"تم بلوغ الحد الأقصى لعدد الملفات؛ بعض الموارد لم تُضَف.",render_unavailable:"المتصفح الآلي غير مثبّت على الخادم؛ تم الاكتفاء بالفحص العادي.",render_failed:"فشل الفحص بعد العرض؛ تم الاكتفاء بالفحص العادي."},
+copied:"تم نسخ التقرير",netErr:"تعذّر الاتصال بالخادم.",
+c:{server:"السيرفر المستخدم",db:"قاعدة البيانات",tech:"التقنيات المكتشفة",sec:"ترويسات الحماية",cookies:"الكوكيز (أسماء فقط)",meta:"بيانات الموقع (Meta)",ext:"الخدمات والمضيفات الخارجية",api:"مسارات API في الأكواد",hdrs:"كل ترويسات الاستجابة",raw:"كل البيانات الخام (JSON)",chain:"سلسلة التحويلات"},
+k:{host:"النطاق",ip:"عنوان IP",software:"برنامج الخادم",powered:"مدعوم بـ",hosting:"الاستضافة / CDN",http:"إصدار HTTP",status:"حالة الاستجابة",ms:"زمن الاستجابة",https:"HTTPS",ctype:"نوع المحتوى",enc:"الضغط",cache:"التخزين المؤقت",lm:"آخر تعديل",date:"تاريخ الخادم",via:"Via",title:"العنوان",desc:"الوصف",lang:"اللغة",dir:"الاتجاه",charset:"الترميز",gen:"المولّد",viewport:"Viewport",theme:"لون الثيم",canon:"الرابط الأساسي",ogt:"عنوان OG",ogi:"صورة OG",author:"المؤلف",kw:"الكلمات المفتاحية",robots:"Robots meta",counts:"العناصر في الصفحة",
+ type:"النوع",size:"الحجم",sha:"SHA-256",src:"المصدر",path:"المسار داخل ZIP",url:"الرابط الكامل",ext:"الامتداد",srv:"الخادم"},
+yes:"نعم",no:"لا",unknown:"غير معروف",none:"لا شيء",
+dbDetected:"مذكورة علناً",dbLikely:"محتملة",dbNone:"لم يُعثر على قاعدة بيانات/خدمة خلفية مذكورة علناً في أكواد الواجهة.",dbHost:"المضيف",dbFiles:"وُجدت في",
+dbLikelyTxt:(p)=>`${p} يعمل عادةً على هذا النوع (استنتاج ضعيف)`,
+dbNote:"تُستنتج فقط من المراجع العلنية داخل الأكواد (بدون أي مفاتيح). قاعدة بيانات الخادم الخلفي الخاصة لا يمكن معرفتها من الخارج.",
+secScore:"درجة الحماية",present:"موجود",missing:"مفقود",
+cats:{cms:"نظام إدارة محتوى",framework:"إطار عمل",library:"مكتبة",ui:"واجهة",server:"خادم",language:"لغة",cdn:"CDN",hosting:"استضافة",cache:"تخزين مؤقت",analytics:"تحليلات",security:"أمان",payments:"مدفوعات",pwa:"PWA",ecommerce:"متجر",builder:"منشئ مواقع"},
+noTech:"لم تُكتشف تقنيات.",noCookies:"لم يرسل الخادم أي كوكيز.",noExt:"لا مضيفات خارجية.",noApi:"لم تُعثر على مسارات API.",
+kinds:{cdn:"CDN",hosting:"استضافة",cache:"تخزين مؤقت"},filesIn:"ملف",analyzing:"جارٍ التحليل…"},
+en:{headline:"Extract web files with ease",sub:"Enter any website URL and the platform collects its public files and shows the server used, any publicly-referenced database, the tech stack and security headers — all in cards, with a download button for every file.",
+start:"Start scan & collect",stop:"Stop",options:"Advanced options",maxPages:"Max pages",maxDepth:"Link depth",maxFiles:"Max files",maxMb:"Max file size (MB)",
+robots:"Respect robots.txt",render:"Post-render scan with headless browser (experimental)",
+sDisc:"Discovered",sDown:"Downloaded",sFail:"Failed",sSize:"Total size",zipAll:"Download all (ZIP)",jsonAll:"Download analysis JSON",copyRep:"Copy report",newOp:"New job",
+all:"All",dl:"Download",noFiles:"No files to show.",searchPh:"Search by file name or URL…",details:"Details",hide:"Hide",
+infoT:"Site information",infoSub:"Derived from public responses only",filesT:"Extracted files",
+noticeT:"Tool limits",noticeL:["The tool runs entirely in your browser and fetches sites through your own Cloudflare Worker. Files are not uploaded anywhere else.","Only publicly accessible resources are collected.","Server and tech are inferred passively from response headers and public code — no hacking, no port scanning.","A database is shown only if it is publicly referenced in front-end code (e.g. Supabase/Firebase). A private backend database cannot be known.","No keys, passwords or tokens are extracted; only public host names and cookie names are shown.","It never bypasses protections. robots.txt alone is not legal clearance — check the site's terms first.","Downloaded JavaScript is never executed. Safety cap: 120MB total to protect mobile memory."],
+histT:"Job history (this session)",noHist:"No previous jobs yet.",footer:"Use only on sites you own or have permission to collect from.",
+rights:y=>`© ${y} ✦ Developed with care by ALAWI ✦ All rights reserved`,devPill:"✦ Dev:",
+st:{pending:"Pending",downloading:"Downloading",done:"Done",failed:"Failed",skipped:"Skipped"},
+state:{done:"Completed",cancelled:"Stopped",error:"Error"},
+ph:{start:"Starting…",robots:"Reading robots.txt…",discover:e=>`Scanning pages (${e.n}/${e.of})…`,render:"Post-render scan…",download:e=>`Downloading files (${e.n}/${e.of})…`},
+done:{done:"Scan complete.",cancelled:"Job stopped. Files downloaded so far are available.",error:"The job stopped because of an error."},
+setupT:"⚙️ Cloudflare Worker proxy setup (one time)",wCopy:"Copy Worker code",wSave:"Save & test",wOk:"✓ Worker is running",wBad:"✗ Unreachable — check the URL",wCopied:"Code copied",
+wSteps:["Open <code>dash.cloudflare.com</code> → Workers & Pages → Create → Hello World → Deploy.","Tap <b>Edit code</b>, delete everything, tap “Copy Worker code” below and paste it, then <b>Deploy</b>.","Copy the Worker URL (ends with <code>workers.dev</code>), paste it below and tap “Save & test”.","Optional hardening: put your GitHub Pages URL in <code>ALLOWED_ORIGIN</code> inside the code so only your site can use the proxy."],
+needWorker:"Enter your Cloudflare Worker URL first (setup above).",zipping:"Building ZIP…",zipFail:"Could not build the ZIP.",workerHint:"Check the Worker URL in the setup.",
+err:{empty:"Please enter a website URL.",bad_url:"The URL is not valid.",no_worker:"Worker URL is not set.",forbidden:"The Worker rejects this site (ALLOWED_ORIGIN).",worker:"Unexpected Worker response",http_error:"Server rejected the request",too_large:"Exceeds max size",timeout:"Timed out",network:"Connection error",unsafe:"Unsafe URL (blocked)",robots:"Disallowed by robots.txt",limit_total:"Total size limit reached",
+ too_many_redirects:"Too many redirects",redirect_bad:"Invalid redirect",write_failed:"Could not save file",unsafe_path:"Unsafe path",internal:"Internal error",cancelled:"Cancelled",job_timeout:"Job time limit reached"},
+note:{limit_files:"File limit reached; some resources were not added.",render_unavailable:"Headless browser is not installed on the server; normal scan only.",render_failed:"Post-render scan failed; normal scan only."},
+copied:"Report copied",netErr:"Could not reach the server.",
+c:{server:"Server in use",db:"Database",tech:"Detected technologies",sec:"Security headers",cookies:"Cookies (names only)",meta:"Site data (Meta)",ext:"External services & hosts",api:"API paths found in code",hdrs:"All response headers",raw:"All raw data (JSON)",chain:"Redirect chain"},
+k:{host:"Domain",ip:"IP address",software:"Server software",powered:"Powered by",hosting:"Hosting / CDN",http:"HTTP version",status:"Response status",ms:"Response time",https:"HTTPS",ctype:"Content type",enc:"Compression",cache:"Cache",lm:"Last modified",date:"Server date",via:"Via",title:"Title",desc:"Description",lang:"Language",dir:"Direction",charset:"Charset",gen:"Generator",viewport:"Viewport",theme:"Theme color",canon:"Canonical",ogt:"OG title",ogi:"OG image",author:"Author",kw:"Keywords",robots:"Robots meta",counts:"Page elements",
+ type:"Type",size:"Size",sha:"SHA-256",src:"Source",path:"Path in ZIP",url:"Full URL",ext:"Extension",srv:"Server"},
+yes:"Yes",no:"No",unknown:"Unknown",none:"None",
+dbDetected:"Publicly referenced",dbLikely:"Likely",dbNone:"No database/backend service is publicly referenced in the front-end code.",dbHost:"Host",dbFiles:"Found in",
+dbLikelyTxt:(p)=>`${p} usually runs on this type (weak inference)`,
+dbNote:"Inferred only from public references in code (no keys). A private backend database cannot be known from outside.",
+secScore:"Security score",present:"Present",missing:"Missing",
+cats:{cms:"CMS",framework:"Framework",library:"Library",ui:"UI",server:"Server",language:"Language",cdn:"CDN",hosting:"Hosting",cache:"Cache",analytics:"Analytics",security:"Security",payments:"Payments",pwa:"PWA",ecommerce:"E-commerce",builder:"Site builder"},
+noTech:"No technologies detected.",noCookies:"The server sent no cookies.",noExt:"No external hosts.",noApi:"No API paths found.",
+kinds:{cdn:"CDN",hosting:"Hosting",cache:"Cache"},filesIn:"files",analyzing:"Analyzing…"}};
+
+const $=s=>document.querySelector(s);
+let lang=(()=>{try{return localStorage.getItem("wep_lang")||"ar"}catch{return"ar"}})(), T=I18N[lang];
+let job=null, es=null, files=new Map(), stats=null, filter="all", running=false, lastPhase=null, lastDone=null, info=null, query="";
+const open=new Set();
+const CATS=["html","js","css","image","font","json","media","other"];
+const CAT_UI={html:["#f97316","#fb923c","i-code"],js:["#eab308","#facc15","i-code"],css:["#38bdf8","#6366f1","i-code"],image:["#ec4899","#f472b6","i-img"],font:["#a78bfa","#7c3aed","i-font"],json:["#34d399","#10b981","i-json"],media:["#f43f5e","#fb7185","i-play2"],other:["#64748b","#94a3b8","i-file"]};
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=n=>n<1024?n+" B":n<1048576?(n/1024).toFixed(1)+" KB":(n/1048576).toFixed(1)+" MB";
+const ic=n=>`<svg class="i"><use href="#${n}"/></svg>`;
+function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,3200)}
+
+function applyLang(){
+  T=I18N[lang];document.documentElement.lang=lang;document.documentElement.dir=lang==="ar"?"rtl":"ltr";
+  $("#langBtn").textContent=lang==="ar"?"EN":"عربي";
+  document.querySelectorAll("[data-t]").forEach(e=>{const v=T[e.dataset.t];if(typeof v==="string")e.textContent=v});
+  document.querySelectorAll("[data-ph]").forEach(e=>e.placeholder=T[e.dataset.ph]);
+  const nm=lang==="ar"?DEV.name:DEV.name_en;
+  $("#devName").textContent=nm;$("#devRights").textContent=T.rights(DEV.year);$("#devPill").textContent=`${T.devPill} ${nm}`;
+  document.title="WEB EXTRACTOR PRO — "+nm;
+  $("#noticeL").innerHTML=T.noticeL.map(x=>`<li>${esc(x)}</li>`).join("");
+  $("#wSteps").innerHTML=T.wSteps.map(x=>`<li>${x}</li>`).join("");
+  renderHist();renderList();renderInfo();if(lastPhase)setPhase(lastPhase);if(lastDone)setDoneMsg(lastDone);
+}
+$("#langBtn").onclick=()=>{lang=lang==="ar"?"en":"ar";try{localStorage.setItem("wep_lang",lang)}catch{}applyLang()};
+
+function showErr(msg){const e=$("#err");e.textContent=msg||"";e.hidden=!msg}
+function errText(code,detail){const m=T.err[code]||code;return detail&&code==="http_error"?`${m} (${detail})`:m}
+function setPhase(ev){lastPhase=ev;const f=T.ph[ev.phase];$("#phase").textContent=typeof f==="function"?f(ev):(f||"");setPct(ev.progress)}
+function setPct(p){$("#fill").style.width=p+"%";$("#pct").textContent=p+"%"}
+function setDoneMsg(d){$("#phase").textContent=T.done[d.state]||""}
+function setStats(s){if(!s)return;stats=s;$("#sD").textContent=s.discovered;$("#sO").textContent=s.downloaded;$("#sF").textContent=s.failed;$("#sS").textContent=fmt(s.size)}
+
+/* ================= بطاقات المعلومات ================= */
+const kv=(rows)=>`<dl class="kv">${rows.filter(r=>r[1]!==""&&r[1]!=null).map(([k,v,o])=>`<dt>${esc(k)}</dt><dd class="${o||""}">${o==="html"?v:esc(v)}</dd>`).join("")}</dl>`;
+const bd=(t,c="")=>`<span class="bd ${c}">${esc(t)}</span>`;
+const card=(cls,c1,c2,icon,title,body,extra="")=>`<article class="ic ${extra}" style="--c1:${c1};--c2:${c2}"><h3><span class="ico">${ic(icon)}</span>${esc(title)}</h3>${body}</article>`;
+
+function serverCard(s){
+  const host=(s.hosting||[]).map(h=>bd(h.name+" · "+(T.kinds[h.kind]||h.kind),"pur")).join("")||esc(T.unknown);
+  const chain=(s.redirect_chain||[]).length?`<div class="chain">${s.redirect_chain.map(c=>`${esc(c.status)} → ${esc(c.url)}`).join("<br>")}<br>200 → ${esc(s.final_url)}</div>`:"";
+  const big=`<div class="big">${esc(s.software||s.powered_by||(s.hosting[0]&&s.hosting[0].name)||T.unknown)}</div><div class="sub" style="margin-bottom:12px;direction:ltr;text-align:start">${esc(s.ip||"")} ${s.host?"· "+esc(s.host):""}</div>`;
+  return card("",'#6366f1','#38bdf8',"i-server",T.c.server,big+kv([
+    [T.k.software,s.software],[T.k.powered,s.powered_by],[T.k.hosting,`<div class="badges">${host}</div>`,"html"],
+    [T.k.ip,s.ip,"mono"],[T.k.http,s.http_version],[T.k.status,s.status],[T.k.ms,s.response_ms?s.response_ms+" ms":""],
+    [T.k.https,s.https?`✓ ${T.yes}`:`✗ ${T.no}`],[T.k.ctype,s.content_type],[T.k.enc,s.content_encoding],[T.k.cache,s.cache_control],[T.k.lm,s.last_modified],[T.k.date,s.date],[T.k.via,s.via]
+  ])+(chain?`<div class="note"><b>${esc(T.c.chain)}</b>${chain}</div>`:""));
+}
+function dbCard(d,done){
+  let body="";
+  (d.found||[]).forEach(x=>{body+=`<div class="dbrow"><b>${esc(x.name)} ${bd(T.dbDetected,"ok")} ${bd(x.kind)}</b><code>${esc(x.host)}</code><span class="sub">${esc(T.dbFiles)}: ${esc((x.files||[]).join(", "))}</span></div>`});
+  (d.inferred||[]).forEach(x=>{body+=`<div class="dbrow"><b>${esc(x.name)} ${bd(T.dbLikely,"warn")}</b><span class="sub">${esc(T.dbLikelyTxt(x.platform))}</span></div>`});
+  if(!body)body=`<div class="empty">${esc(done?T.dbNone:T.analyzing)}</div>`;
+  return card("",'#10b981','#38bdf8',"i-db",T.c.db,body+`<div class="note">${esc(T.dbNote)}</div>`);
+}
+function techCard(list){
+  if(!list.length)return card("",'#a78bfa','#7c3aed',"i-cpu",T.c.tech,`<div class="empty">${esc(T.noTech)}</div>`);
+  const g={};list.forEach(t=>(g[t.category]=g[t.category]||[]).push(t));
+  const body=Object.keys(g).sort().map(c=>`<div class="techgrp"><span>${esc(T.cats[c]||c)}</span><div class="badges">${g[c].map(t=>`<span class="bd pur" title="${esc(t.evidence)}">${esc(t.name)}</span>`).join("")}</div></div>`).join("");
+  return card("",'#a78bfa','#7c3aed',"i-cpu",T.c.tech,body);
+}
+function secCard(s){
+  const col=s.score>=70?"var(--ok)":s.score>=40?"var(--warn)":"var(--bad)";
+  const rows=s.items.map(i=>`<div><span>${esc(i.header)}</span>${bd(i.present?T.present:T.missing,i.present?"ok":"bad")}</div>`).join("");
+  return card("",'#f59e0b','#ef4444',"i-lock",T.c.sec,`<div class="sec-row"><div class="ring" style="--v:${s.score};--rc:${col}"><b>${s.score}%</b></div><div class="shl">${rows}</div></div>`);
+}
+function cookieCard(c){
+  const body=c.length?`<div class="scroll"><table class="tbl"><tr><th>Name</th><th>Secure</th><th>HttpOnly</th><th>SameSite</th></tr>${c.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.secure?"✓":"✗"}</td><td>${x.httponly?"✓":"✗"}</td><td>${esc(x.samesite)}</td></tr>`).join("")}</table></div>`:`<div class="empty">${esc(T.noCookies)}</div>`;
+  return card("",'#f472b6','#fb7185',"i-cookie",T.c.cookies,body);
+}
+function metaCard(m){
+  const cn=m.counts||{};
+  return card("",'#38bdf8','#6366f1',"i-globe",T.c.meta,kv([[T.k.title,m.title,"rtl"],[T.k.desc,m.description,"rtl"],[T.k.lang,m.lang],[T.k.dir,m.dir],[T.k.charset,m.charset],[T.k.gen,m.generator],[T.k.author,m.author],[T.k.kw,m.keywords],[T.k.canon,m.canonical],[T.k.viewport,m.viewport],[T.k.theme,m.theme_color],[T.k.robots,m.robots_meta],[T.k.ogt,m.og_title],[T.k.ogi,m.og_image],
+    [T.k.counts,`<div class="badges">${Object.entries(cn).map(([k,v])=>bd(k+": "+v)).join("")}</div>`,"html"]]));
+}
+function extCard(list,done){
+  const body=list.length?`<div class="scroll"><table class="tbl">${list.map(x=>`<tr><td>${esc(x.host)}</td><td>${x.files} ${esc(T.filesIn)}</td></tr>`).join("")}</table></div>`:`<div class="empty">${esc(done?T.noExt:T.analyzing)}</div>`;
+  return card("",'#06b6d4','#6366f1',"i-link",T.c.ext,body);
+}
+function apiCard(list,done){
+  const body=list.length?`<div class="scroll"><table class="tbl">${list.map(x=>`<tr><td>${esc(x.path)}</td><td>${esc((x.files||[]).join(", "))}</td></tr>`).join("")}</table></div>`:`<div class="empty">${esc(done?T.noApi:T.analyzing)}</div>`;
+  return card("",'#84cc16','#10b981',"i-code",T.c.api,body);
+}
+function rawCard(i){
+  const h=i.server&&i.server.all_headers||{};
+  const ht=Object.keys(h).map(k=>`${k}: ${h[k]}`).join("\n");
+  return `<article class="ic wide" style="--c1:#64748b;--c2:#94a3b8"><h3><span class="ico">${ic("i-braces")}</span>${esc(T.c.hdrs)} / ${esc(T.c.raw)}</h3>
+  <details><summary>${esc(T.c.hdrs)}</summary><pre class="raw">${esc(ht)}</pre></details>
+  <details><summary>${esc(T.c.raw)}</summary><pre class="raw">${esc(JSON.stringify(i,null,2))}</pre></details></article>`;
+}
+function renderInfo(){
+  const sec=$("#infoSec");
+  if(!info){sec.hidden=true;return}
+  sec.hidden=false;
+  const done=!running;
+  $("#infoGrid").innerHTML=[serverCard(info.server),dbCard(info.database,done),techCard(info.tech||[]),secCard(info.security),cookieCard(info.cookies||[]),metaCard(info.meta||{}),extCard(info.external_hosts||[],done),apiCard(info.api_paths||[],done),rawCard(info)].join("");
+}
+
+/* ================= بطاقات الملفات ================= */
+let raf=0;function scheduleRender(){if(!raf)raf=setTimeout(()=>{raf=0;renderList()},180)}
+function fileCard(f){
+  const [c1,c2,icon]=CAT_UI[f.category]||CAT_UI.other;
+  const can=f.status==="done";
+  const href=f.obj||"#";
+  const det=open.has(f.id)?`<div class="fd">${kv([[T.k.url,f.url,"mono"],[T.k.type,f.content_type],[T.k.ext,f.ext],[T.k.size,can?`${fmt(f.size)} (${f.size.toLocaleString("en")} B)`:""],[T.k.status,f.http_status||""],[T.k.sha,f.sha256,"mono"],[T.k.lm,f.last_modified],[T.k.cache,f.cache_control],[T.k.enc,f.encoding],[T.k.srv,f.server],[T.k.src,f.source],[T.k.path,f.local_path,"mono"]])}</div>`:"";
+  return `<article class="fc" style="--c1:${c1};--c2:${c2}">
+    <div class="fc-top"><div class="fi">${ic(icon)}</div>
+      <div class="fn"><b title="${esc(f.url)}">${esc(f.name)}</b><small title="${esc(f.url)}">${esc(f.url)}</small></div></div>
+    <div class="fm"><span class="tag">${esc(f.category)}</span><span class="sz">${can?fmt(f.size):"—"}</span><span class="pill ${esc(f.status)}">${esc(T.st[f.status]||f.status)}</span></div>
+    ${f.error?`<div class="fe">${esc(errText(f.error,f.detail))}</div>`:""}
+    <div class="fa"><a class="btn dl ${can?"":"off"}" ${can?`href="${esc(href)}" download="${esc(f.name)}"`:""}>${ic("i-dl")}<span>${esc(T.dl)}</span></a>
+      <button type="button" class="sm" data-d="${esc(f.id)}" aria-expanded="${open.has(f.id)}">${ic("i-info")}<span>${esc(open.has(f.id)?T.hide:T.details)}</span></button></div>
+    ${det}</article>`;
+}
+function renderList(){
+  const counts={all:files.size};CATS.forEach(c=>counts[c]=0);files.forEach(f=>counts[f.category]=(counts[f.category]||0)+1);
+  $("#chips").innerHTML=["all",...CATS].filter(c=>c==="all"||counts[c]).map(c=>`<button type="button" class="chip ${filter===c?"on":""}" data-c="${c}">${c==="all"?T.all:c.toUpperCase()} (${counts[c]})</button>`).join("");
+  const q=query.toLowerCase();
+  const rows=job?[...files.values()].filter(f=>(filter==="all"||f.category===filter)&&(!q||f.url.toLowerCase().includes(q)||f.name.toLowerCase().includes(q))):[];
+  $("#list").innerHTML=rows.length?rows.map(fileCard).join(""):`<div class="sz">${esc(T.noFiles)}</div>`;
+}
+$("#chips").onclick=e=>{const b=e.target.closest(".chip");if(b){filter=b.dataset.c;renderList()}};
+$("#list").onclick=e=>{const b=e.target.closest("[data-d]");if(!b)return;const id=b.dataset.d;open.has(id)?open.delete(id):open.add(id);renderList()};
+$("#q").oninput=e=>{query=e.target.value.trim();renderList()};
+
+/* ================= المحرك: يعمل كله داخل المتصفح عبر Cloudflare Worker ================= */
+const WKEY="wep_worker";
+const getW=()=>{let v="";try{v=localStorage.getItem(WKEY)||""}catch{}return(v||WORKER_URL||"").trim().replace(/\/+$/,"")};
+class FErr extends Error{constructor(c,d=""){super(c);this.code=c;this.detail=d}}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const MAX_TOTAL=120*1024*1024;
+let ctl=null, store=new Map(), runId=0;
+
+/* ---------- الاتصال عبر الـ Worker ---------- */
+async function pget(url,{html=false,max=10485760}={}){
+  while(window.__paused&&!(ctl&&ctl.signal.aborted))await new Promise(r=>setTimeout(r,200));
+  const W=getW();
+  let r;
+  try{r=await fetch(`${W}/?url=${encodeURIComponent(url)}&max=${max}${html?"&a=h":""}`,{signal:ctl.signal})}
+  catch(e){if(e.name==="AbortError")throw e;throw new FErr("network","worker")}
+  const err=r.headers.get("x-proxy-error");
+  if(err)throw new FErr(err,r.headers.get("x-proxy-detail")||"");
+  if(!r.ok)throw new FErr("worker","HTTP "+r.status);
+  let meta={};try{meta=JSON.parse(decodeURIComponent(r.headers.get("x-proxy-meta")||"%7B%7D"))}catch{}
+  if(!meta.status)throw new FErr("worker","bad response");
+  if(meta.status>=400)throw new FErr("http_error","HTTP "+meta.status);
+  let buf;try{buf=await r.arrayBuffer()}catch(e){if(e.name==="AbortError")throw e;throw new FErr("too_large")}
+  if(buf.byteLength>max)throw new FErr("too_large");
+  const h=meta.headers||{};
+  return{url:meta.final_url||url,status:meta.status,headers:h,cookies:meta.cookies||[],chain:meta.chain||[],ms:meta.ms||0,buf,ct:h["content-type"]||""};
+}
+
+/* ---------- المحلل (HTML / CSS) ---------- */
+const EXT={html:[".html",".htm",".xhtml",".php",".asp",".aspx",".jsp"],js:[".js",".mjs",".cjs"],css:[".css"],image:[".png",".jpg",".jpeg",".svg",".webp",".gif",".ico",".avif",".bmp"],font:[".woff",".woff2",".ttf",".otf",".eot"],json:[".json",".webmanifest"],media:[".mp3",".mp4",".webm",".ogg",".wav",".m4a",".mov",".m4v"],other:[".pdf",".txt",".xml",".csv"]};
+const extOf=u=>{try{const p=new URL(u).pathname,i=p.lastIndexOf(".");return i>p.lastIndexOf("/")?p.slice(i).toLowerCase():""}catch{return""}};
+function catFor(u,ct=""){const e=extOf(u);for(const c in EXT)if(EXT[c].includes(e))return c;ct=(ct||"").split(";")[0].trim().toLowerCase();if(!ct)return null;
+  if(ct.includes("html"))return"html";if(/javascript|ecmascript/.test(ct))return"js";if(ct==="text/css")return"css";if(ct.startsWith("image/"))return"image";
+  if(ct.startsWith("font/")||ct.includes("font"))return"font";if(ct.includes("json"))return"json";if(/^(audio|video)\//.test(ct))return"media";return"other"}
+const SKIP=/^(data:|javascript:|mailto:|tel:|blob:|about:|#)/i;
+function cleanUrl(raw,base){if(!raw)return null;raw=raw.trim();if(!raw||SKIP.test(raw))return null;
+  try{const u=new URL(raw,base);if(u.protocol!=="http:"&&u.protocol!=="https:")return null;u.hash="";return u.href}catch{return null}}
+function extractCss(text,base){const out=[];let m;
+  const imp=/@import\s+(?:url\(\s*)?['"]([^'"]+)['"]/gi;while((m=imp.exec(text))){const u=cleanUrl(m[1],base);if(u)out.push([u,"css"])}
+  const re=/url\(\s*['"]?([^'")\s]+)['"]?\s*\)/gi;while((m=re.exec(text))){const u=cleanUrl(m[1],base);if(u)out.push([u,null])}return out}
+function extractHtml(text,base){
+  const doc=new DOMParser().parseFromString(text,"text/html"); // لا يُنفَّذ أي سكربت ولا تُحمَّل أي موارد
+  const b=doc.querySelector("base[href]");if(b)base=cleanUrl(b.getAttribute("href"),base)||base;
+  const res=[],links=[];const add=(raw,hint)=>{const u=cleanUrl(raw,base);if(u)res.push([u,hint||null])};
+  doc.querySelectorAll("*").forEach(t=>{const n=t.tagName.toLowerCase(),g=a=>t.getAttribute(a);
+    if(n==="link"&&g("href")){const rel=(g("rel")||"").toLowerCase();
+      if(rel.includes("stylesheet"))add(g("href"),"css");else if(/icon|apple-touch|mask-icon/.test(rel))add(g("href"),"image");
+      else if(rel.includes("manifest"))add(g("href"),"json");else if(rel.includes("modulepreload"))add(g("href"),"js");
+      else if(/preload|prefetch/.test(rel))add(g("href"),{script:"js",style:"css",font:"font",image:"image"}[(g("as")||"").toLowerCase()])}
+    else if(n==="script"&&g("src"))add(g("src"),"js");
+    else if(["img","source","video","audio","track","embed","input"].includes(n)){
+      for(const a of["src","data-src","poster"])if(g(a)){const hint=(n==="video"||n==="audio")&&a==="src"?"media":(n==="img"||n==="input"||a==="poster")?"image":null;add(g(a),hint)}
+      for(const a of["srcset","data-srcset"])(g(a)||"").split(",").forEach(p=>{const tok=p.trim().split(/\s+/)[0];if(tok)add(tok,"image")})}
+    else if(n==="a"&&g("href")){const u=cleanUrl(g("href"),base);if(u)links.push(u)}
+    else if(n==="meta"){const k=(g("property")||g("name")||"").toLowerCase();if(["og:image","twitter:image","og:video","msapplication-tileimage"].includes(k))add(g("content"),/image|tile/.test(k)?"image":"media")}
+    else if(n==="style"&&t.textContent)res.push(...extractCss(t.textContent,base));
+    if(g("style"))res.push(...extractCss(g("style"),base))});
+  return[res,links]}
+
+/* ---------- المسارات المحلية داخل ZIP ---------- */
+const hash8=s=>{let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(16).padStart(8,"0")};
+const dec=s=>{try{return decodeURIComponent(s)}catch{return s}};
+function localRel(url,cat){
+  const p=new URL(url);let host=p.hostname.replace(/[^A-Za-z0-9.\-]/g,"_");if(p.port)host+="_"+p.port;
+  const segs=dec(p.pathname).split("/").filter(Boolean),ends=p.pathname.endsWith("/")||!segs.length,clean=[];
+  for(let s of segs){s=s.replace(/[^\p{L}\p{N}_.\-~ ()@+]/gu,"_").replace(/^[. ]+|[. ]+$/g,"").slice(0,100);if(s)clean.push(s)}
+  if(ends||!clean.length)clean.push("index.html");
+  const name=clean[clean.length-1],i=name.lastIndexOf(".");let stem=i>0?name.slice(0,i):name,ext=i>0?name.slice(i):"";
+  if(!ext&&cat==="html")ext=".html";if(p.search)stem+="__"+hash8(p.search);
+  clean[clean.length-1]=(stem+ext).slice(0,120);return[host,...clean].join("/")}
+
+/* ---------- robots.txt ---------- */
+function parseRobots(txt){const groups=[];let cur=null,lastUA=false;
+  for(let line of txt.split(/\r?\n/)){line=line.replace(/#.*/,"").trim();const i=line.indexOf(":");if(i<0)continue;const k=line.slice(0,i).trim().toLowerCase(),v=line.slice(i+1).trim();
+    if(k==="user-agent"){if(!lastUA||!cur){cur={ua:[],rules:[]};groups.push(cur)}cur.ua.push(v.toLowerCase());lastUA=true}
+    else{lastUA=false;if(cur&&(k==="disallow"||k==="allow"))cur.rules.push([k,v])}}
+  const g=groups.find(g=>g.ua.some(u=>u!=="*"&&"webextractorpro".includes(u)))||groups.find(g=>g.ua.includes("*"));return g?g.rules:[]}
+function robotsOk(rules,url){if(!rules||!rules.length)return true;const u=new URL(url),path=u.pathname+u.search;let best=-1,allow=true;
+  for(const[k,v]of rules){if(!v)continue;let pat=v;const end=pat.endsWith("$");if(end)pat=pat.slice(0,-1);
+    let re;try{re=new RegExp("^"+pat.replace(/[.+?^${}()|[\]\\]/g,"\\$&").replace(/\*/g,".*")+(end?"$":""))}catch{continue}
+    if(re.test(path)&&(v.length>best||(v.length===best&&k==="allow"))){best=v.length;allow=k==="allow"}}
+  return allow}
+
+/* ---------- تحليل بصمة الموقع ---------- */
+const HOSTING=[
+ ["Cloudflare","cdn",h=>"cf-ray" in h||(h.server||"").toLowerCase()==="cloudflare"],
+ ["Vercel","hosting",h=>"x-vercel-id" in h||(h.server||"").toLowerCase()==="vercel"],
+ ["Netlify","hosting",h=>"x-nf-request-id" in h||(h.server||"").toLowerCase()==="netlify"],
+ ["GitHub Pages","hosting",h=>"x-github-request-id" in h],
+ ["Amazon CloudFront","cdn",h=>"x-amz-cf-id" in h||(h.via||"").toLowerCase().includes("cloudfront")],
+ ["Amazon S3","hosting",h=>h.server==="AmazonS3"],
+ ["Fastly","cdn",h=>(h["x-served-by"]||"").toLowerCase().includes("cache-")],
+ ["Akamai","cdn",h=>(h.server||"").toLowerCase().includes("akamai")||"x-akamai-transformed" in h],
+ ["Azure Front Door","cdn",h=>"x-azure-ref" in h],
+ ["Google Cloud","hosting",h=>/gws|google frontend/i.test(h.server||"")||"x-cloud-trace-context" in h],
+ ["Firebase Hosting","hosting",h=>/firebase/i.test((h["x-served-by"]||"")+(h.server||""))],
+ ["Fly.io","hosting",h=>"fly-request-id" in h],
+ ["Render","hosting",h=>"x-render-origin-server" in h||"rndr-id" in h],
+ ["Heroku","hosting",h=>(h.via||"").toLowerCase().includes("heroku")],
+ ["Railway","hosting",h=>"x-railway-request-id" in h||(h.server||"").toLowerCase().includes("railway")],
+ ["Sucuri","cdn",h=>"x-sucuri-id" in h],
+ ["Varnish","cache",h=>"x-varnish" in h||(h.via||"").toLowerCase().includes("varnish")]];
+const HTML_TECH=[["/wp-content/|/wp-includes/|wp-json", "WordPress", "cms"], ["/sites/default/files|drupal-settings-json", "Drupal", "cms"], ["/media/jui/|com_content|joomla", "Joomla", "cms"], ["cdn\\.shopify\\.com|Shopify\\.theme", "Shopify", "ecommerce"], ["static\\.wixstatic\\.com|wix\\.com", "Wix", "builder"], ["static1\\.squarespace\\.com|squarespace", "Squarespace", "builder"], ["assets\\.website-files\\.com|data-wf-page", "Webflow", "builder"], ["/_next/static|__NEXT_DATA__", "Next.js", "framework"], ["/_nuxt/|__NUXT__", "Nuxt", "framework"], ["ng-version=|<app-root", "Angular", "framework"], ["data-reactroot|react-dom|__REACT_DEVTOOLS|react\\.production", "React", "library"], ["vue(\\.runtime)?(\\.min)?\\.js|data-v-[0-9a-f]{6,}|__VUE__", "Vue.js", "library"], ["svelte-[a-z0-9]{4,}|/_app/immutable", "Svelte/SvelteKit", "framework"], ["astro-island|/_astro/", "Astro", "framework"], ["___gatsby|gatsby-", "Gatsby", "framework"], ["jquery[.\\-/][\\d.]*(min\\.)?js|jQuery\\.fn", "jQuery", "library"], ["bootstrap(\\.bundle)?(\\.min)?\\.(css|js)|class=\\\"[^\\\"]*\\b(container-fluid|btn-primary)\\b", "Bootstrap", "ui"], ["tailwind|class=\\\"[^\\\"]*\\b(flex items-center|text-gray-\\d00|bg-gray-\\d00)\\b", "Tailwind CSS", "ui"], ["font-?awesome|fa-solid|fontawesome", "Font Awesome", "ui"], ["fonts\\.googleapis\\.com|fonts\\.gstatic\\.com", "Google Fonts", "ui"], ["googletagmanager\\.com", "Google Tag Manager", "analytics"], ["google-analytics\\.com|gtag\\(|G-[A-Z0-9]{6,}", "Google Analytics", "analytics"], ["connect\\.facebook\\.net|fbq\\(", "Meta Pixel", "analytics"], ["static\\.hotjar\\.com", "Hotjar", "analytics"], ["cloudflareinsights\\.com", "Cloudflare Web Analytics", "analytics"], ["plausible\\.io|umami", "Privacy Analytics", "analytics"], ["google\\.com/recaptcha|gstatic\\.com/recaptcha", "reCAPTCHA", "security"], ["hcaptcha\\.com", "hCaptcha", "security"], ["challenges\\.cloudflare\\.com|turnstile", "Cloudflare Turnstile", "security"], ["stripe\\.com/v3|js\\.stripe\\.com", "Stripe", "payments"], ["paypal\\.com/sdk", "PayPal", "payments"], ["socket\\.io", "Socket.IO", "library"], ["leaflet", "Leaflet (Maps)", "library"], ["maps\\.googleapis\\.com", "Google Maps", "library"], ["chart(\\.min)?\\.js|chart\\.umd", "Chart.js", "library"], ["serviceWorker\\.register|workbox", "Service Worker / PWA", "pwa"], ["<link[^>]+rel=[\\\"']manifest", "Web App Manifest", "pwa"]];
+const HEADER_TECH=[["x-powered-by", "php", "PHP", "language"], ["x-powered-by", "express", "Express (Node.js)", "framework"], ["x-powered-by", "asp\\.net", "ASP.NET", "framework"], ["x-powered-by", "next\\.js", "Next.js", "framework"], ["x-powered-by", "strapi", "Strapi CMS", "cms"], ["x-powered-by", "wp engine", "WP Engine", "hosting"], ["x-aspnet-version", ".", "ASP.NET", "framework"], ["x-drupal-cache", ".", "Drupal", "cms"], ["x-generator", "drupal", "Drupal", "cms"], ["x-generator", "wordpress", "WordPress", "cms"], ["x-shopify-stage", ".", "Shopify", "ecommerce"], ["x-wix-request-id", ".", "Wix", "builder"], ["server", "nginx", "Nginx", "server"], ["server", "apache", "Apache", "server"], ["server", "litespeed", "LiteSpeed", "server"], ["server", "microsoft-iis", "Microsoft IIS", "server"], ["server", "caddy", "Caddy", "server"], ["server", "openresty", "OpenResty", "server"], ["server", "gunicorn", "Gunicorn (Python)", "server"], ["server", "uvicorn", "Uvicorn (Python)", "server"], ["server", "werkzeug", "Flask/Werkzeug (Python)", "framework"], ["server", "kestrel", "Kestrel (.NET)", "server"], ["server", "cowboy", "Cowboy (Erlang/Elixir)", "server"], ["server", "tomcat|jetty|coyote", "Java Servlet Container", "server"]];
+const DB_HOSTS=[["[a-z0-9\\-]+\\.supabase\\.(?:co|in|net)", "Supabase", "PostgreSQL"], ["[a-z0-9\\-]+\\.firebaseio\\.com|[a-z0-9\\-]+\\.firebasedatabase\\.app", "Firebase Realtime Database", "NoSQL (JSON)"], ["firestore\\.googleapis\\.com", "Cloud Firestore (Firebase)", "NoSQL (Documents)"], ["[a-z0-9\\-]+\\.firebaseapp\\.com|firebasestorage\\.googleapis\\.com|identitytoolkit\\.googleapis\\.com", "Firebase (Auth/Storage)", "Backend-as-a-Service"], ["[a-z0-9\\-]+\\.appwrite\\.(?:io|network)|cloud\\.appwrite\\.io", "Appwrite", "MariaDB"], ["realm\\.mongodb\\.com|data\\.mongodb-api\\.com|services\\.cloud\\.mongodb\\.com", "MongoDB Atlas / Realm", "MongoDB"], ["[a-z0-9\\-]+\\.convex\\.(?:cloud|site)", "Convex", "Document DB"], ["[a-z0-9\\-]+\\.hasura\\.app", "Hasura", "PostgreSQL (GraphQL)"], ["[a-z0-9\\-]+\\.neon\\.tech", "Neon", "PostgreSQL"], ["[a-z0-9\\-]+\\.upstash\\.io", "Upstash", "Redis / Kafka"], ["[a-z0-9\\-]+\\.xata\\.sh", "Xata", "PostgreSQL"], ["api\\.airtable\\.com", "Airtable", "Spreadsheet-DB"], ["sheets\\.googleapis\\.com|docs\\.google\\.com/spreadsheets", "Google Sheets", "Spreadsheet-DB"], ["[a-z0-9\\-]+\\.algolia(?:net\\.com|\\.net)", "Algolia", "Search index"], ["[a-z0-9\\-]+\\.meilisearch\\.[a-z]+", "Meilisearch", "Search index"], ["[a-z0-9\\-]+\\.back4app\\.io|parseapi\\.back4app\\.com", "Back4App (Parse)", "MongoDB"], ["[a-z0-9\\-]+\\.pockethost\\.io", "PocketBase", "SQLite"], ["[a-z0-9\\-]+\\.directus\\.app", "Directus", "SQL"], ["[a-z0-9\\-]+\\.(?:sanity\\.io|apicdn\\.sanity\\.io)", "Sanity", "Content Lake"], ["graphql\\.contentful\\.com|cdn\\.contentful\\.com", "Contentful", "Headless CMS"], ["[a-z0-9\\-]+\\.appsync-api\\.[a-z0-9\\-]+\\.amazonaws\\.com|dynamodb\\.[a-z0-9\\-]+\\.amazonaws\\.com", "AWS (AppSync/DynamoDB)", "DynamoDB"], ["fauna\\.com", "FaunaDB", "Document DB"], ["[a-z0-9\\-]+\\.turso\\.io", "Turso", "SQLite (libSQL)"], ["[a-z0-9\\-]+\\.planetscale\\.com", "PlanetScale", "MySQL"], ["[a-z0-9\\-]+\\.cockroachlabs\\.cloud", "CockroachDB", "PostgreSQL-compatible"]];
+const DB_INFERRED={"WordPress": "MySQL / MariaDB", "Drupal": "MySQL / PostgreSQL", "Joomla": "MySQL / MariaDB", "Shopify": "Shopify managed DB", "ASP.NET": "Microsoft SQL Server", "Strapi CMS": "SQLite / PostgreSQL / MySQL", "Laravel (PHP)": "MySQL / PostgreSQL", "Django (Python)": "PostgreSQL / SQLite / MySQL"};
+const SEC_HEADERS=[["strict-transport-security", "HSTS", 2], ["content-security-policy", "CSP", 3], ["x-frame-options", "X-Frame-Options", 1], ["x-content-type-options", "X-Content-Type-Options", 1], ["referrer-policy", "Referrer-Policy", 1], ["permissions-policy", "Permissions-Policy", 1], ["cross-origin-opener-policy", "COOP", 1]];
+
+const addTech=(st,n,c,e)=>{if(!st[n])st[n]={name:n,category:c,evidence:e}};
+function scanText(text,st,where){for(const[p,n,c]of HTML_TECH){if(st[n])continue;let m;try{m=new RegExp(p,"i").exec(text)}catch{continue}if(m)addTech(st,n,c,`${where}: ${m[0].slice(0,48)}`)}}
+function analyzePage(f,html){
+  const h=f.headers,host=new URL(f.url).hostname,tech={};
+  const hosting=HOSTING.filter(([,,t])=>{try{return t(h)}catch{return false}}).map(([name,kind])=>({name,kind}));
+  for(const[hd,p,n,c]of HEADER_TECH)if(h[hd]&&new RegExp(p,"i").test(h[hd]))addTech(tech,n,c,`${hd}: ${h[hd].slice(0,60)}`);
+  scanText(html,tech,"HTML");
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  const mt=n=>{const e=doc.querySelector(`meta[name="${n}"],meta[property="${n}"]`);return e?(e.getAttribute("content")||"").trim().slice(0,300):""};
+  const q=(s,a)=>{const e=doc.querySelector(s);return e?(a?e.getAttribute(a):e.textContent||"").trim().replace(/\s+/g," ").slice(0,300):""};
+  const meta={title:q("title"),description:mt("description"),keywords:mt("keywords"),generator:mt("generator"),lang:doc.documentElement.getAttribute("lang")||"",dir:doc.documentElement.getAttribute("dir")||"",
+    charset:q("meta[charset]","charset"),viewport:mt("viewport"),theme_color:mt("theme-color"),robots_meta:mt("robots"),canonical:q('link[rel="canonical"]',"href"),og_title:mt("og:title"),og_image:mt("og:image"),og_site_name:mt("og:site_name"),author:mt("author"),
+    counts:{scripts:doc.querySelectorAll("script").length,stylesheets:doc.querySelectorAll('link[rel~="stylesheet"]').length,images:doc.querySelectorAll("img").length,links:doc.querySelectorAll("a").length,forms:doc.querySelectorAll("form").length,iframes:doc.querySelectorAll("iframe").length}};
+  if(meta.generator)for(const n of["WordPress","Joomla","Drupal","Wix","Hugo","Jekyll","Ghost","Gatsby","Astro","Shopify"])if(meta.generator.toLowerCase().includes(n.toLowerCase()))addTech(tech,n,["WordPress","Joomla","Drupal","Ghost"].includes(n)?"cms":"framework",`meta generator: ${meta.generator.slice(0,60)}`);
+  const cookies=f.cookies||[];
+  for(const c of cookies){const n=c.name.toLowerCase();
+    if(n.startsWith("laravel_session")||n==="xsrf-token")addTech(tech,"Laravel (PHP)","framework","cookie: "+c.name);
+    else if(n==="csrftoken"||n==="sessionid")addTech(tech,"Django (Python)","framework","cookie: "+c.name);
+    else if(n==="phpsessid")addTech(tech,"PHP","language","cookie: PHPSESSID");
+    else if(n==="asp.net_sessionid"||n.startsWith(".aspnetcore"))addTech(tech,"ASP.NET","framework","cookie: "+c.name);
+    else if(n==="jsessionid")addTech(tech,"Java (JSP/Servlet)","language","cookie: JSESSIONID");
+    else if(n.startsWith("connect.sid"))addTech(tech,"Express (Node.js)","framework","cookie: connect.sid");
+    else if(n.startsWith("__cf")||n==="cf_clearance")addTech(tech,"Cloudflare","cdn","cookie: "+c.name)}
+  let sc=0,tot=0;const items=SEC_HEADERS.map(([k,label,w])=>{const ok=k in h;tot+=w;if(ok)sc+=w;return{header:label,present:ok,value:(h[k]||"").slice(0,160)}});
+  const hdrs={};Object.keys(h).sort().forEach(k=>hdrs[k]=h[k]);
+  return{server:{host,ip:"",software:h.server||"",powered_by:h["x-powered-by"]||"",hosting,http_version:"",status:f.status,response_ms:f.ms,final_url:f.url,redirect_chain:f.chain||[],
+      content_type:h["content-type"]||"",content_encoding:h["content-encoding"]||"",cache_control:h["cache-control"]||"",last_modified:h["last-modified"]||"",date:h.date||"",via:h.via||"",https:f.url.toLowerCase().startsWith("https://"),all_headers:hdrs},
+    security:{items,score:Math.round(100*sc/tot)},cookies,meta,tech:Object.values(tech).sort((a,b)=>a.category.localeCompare(b.category)||a.name.localeCompare(b.name)),
+    database:{found:[],inferred:[],scanned_files:0},external_hosts:[],api_paths:[]}}
+const URL_IN_TEXT=/https?:\/\/([a-z0-9][a-z0-9.\-]{1,252}\.[a-z]{2,24})(?::\d+)?/gi;
+const API_PATH=/["'`](\/(?:api|graphql|rest|v\d)\/[A-Za-z0-9_\-./]{1,80})["'`]/g;
+async function analyzeAssets(info,siteHost,texts){
+  const tech={};info.tech.forEach(t=>tech[t.name]=t);const db=new Map(),ext=new Map(),api=new Map();
+  const dbRe=DB_HOSTS.map(([p,l,k])=>[new RegExp("(^|[^\\w.\\-])("+p+")(?![\\w\\-])","gi"),l,k]);
+  let n=0;
+  for(const[name,text]of texts){scanText(text,tech,name);
+    for(const[re,label,kind]of dbRe){re.lastIndex=0;let m;while((m=re.exec(text))){const host=m[2].toLowerCase(),key=label+"|"+host;if(!db.has(key))db.set(key,{name:label,kind,host,files:new Set()});db.get(key).files.add(name)}}
+    URL_IN_TEXT.lastIndex=0;let m;while((m=URL_IN_TEXT.exec(text))){const h=m[1].toLowerCase().replace(/\.$/,"");if(h===siteHost||h.endsWith("."+siteHost)||["www.w3.org","schema.org","localhost"].includes(h))continue;if(!ext.has(h))ext.set(h,new Set());ext.get(h).add(name)}
+    API_PATH.lastIndex=0;while((m=API_PATH.exec(text))){if(!api.has(m[1]))api.set(m[1],new Set());api.get(m[1]).add(name)}
+    if(++n%8===0)await sleep(0)}
+  const found=[...db.values()].map(d=>({name:d.name,kind:d.kind,host:d.host,files:[...d.files].slice(0,6),confidence:"detected"})).sort((a,b)=>a.name.localeCompare(b.name)).slice(0,20);
+  const inferred=Object.values(tech).filter(t=>DB_INFERRED[t.name]&&!found.some(f=>f.name===t.name)).map(t=>({name:DB_INFERRED[t.name],platform:t.name,confidence:"likely"}));
+  info.tech=Object.values(tech).sort((a,b)=>a.category.localeCompare(b.category)||a.name.localeCompare(b.name));
+  info.database={found,inferred,scanned_files:texts.length};
+  info.external_hosts=[...ext].sort((a,b)=>b[1].size-a[1].size||a[0].localeCompare(b[0])).slice(0,40).map(([host,f])=>({host,files:f.size}));
+  info.api_paths=[...api].sort((a,b)=>a[0].localeCompare(b[0])).slice(0,40).map(([path,f])=>({path,files:[...f].slice(0,3)}));
+  return info}
+async function resolveIPs(host){const c=new AbortController();const t=setTimeout(()=>c.abort(),6000);
+  try{const out=[];for(const type of["A","AAAA"]){const r=await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(host)}&type=${type}`,{headers:{accept:"application/dns-json"},signal:c.signal});const j=await r.json();(j.Answer||[]).filter(a=>a.type===(type==="A"?1:28)).forEach(a=>out.push(a.data))}return out.slice(0,6)}catch{return[]}finally{clearTimeout(t)}}
+
+/* ---------- المشغّل الرئيسي ---------- */
+async function sha(buf){try{if(!crypto.subtle)return"";return[...new Uint8Array(await crypto.subtle.digest("SHA-256",buf))].map(b=>b.toString(16).padStart(2,"0")).join("")}catch{return""}}
+const classify=e=>e instanceof FErr?[e.code,e.detail]:(e&&e.name==="TimeoutError"?["timeout",""]:["internal",e&&e.name||""]);
+function normalizeUrl(raw){let u=(raw||"").trim();if(!u)throw new FErr("empty");if(!/^[a-z][a-z0-9+.\-]*:\/\//i.test(u))u="https://"+u;let p;try{p=new URL(u)}catch{throw new FErr("bad_url")}if(!["http:","https:"].includes(p.protocol))throw new FErr("bad_url");return p.href}
+
+async function run(startUrl,o){
+  const my=++runId;ctl=new AbortController();store=new Map();
+  const items=files,seen=new Set(),used=new Set(),dirs=new Set();let total=0,pages=0,truncated=false,robots=null,errCode="",note="";
+  const delay=80,cancelled=()=>ctl.signal.aborted||my!==runId,dlQ=[];
+  const siteKey=u=>{const h=new URL(u).hostname.toLowerCase();return h.startsWith("www.")?h.slice(4):h};
+  const mkStats=()=>{const c={downloaded:0,failed:0,skipped:0};items.forEach(i=>{if(i.status==="done")c.downloaded++;else if(i.status==="failed")c.failed++;else if(i.status==="skipped")c.skipped++});return{discovered:items.size,size:total,...c}};
+  const emit=()=>{setStats(mkStats());scheduleRender()};
+  const prog=(ph,p,d={})=>setPhase({phase:ph,progress:Math.max(lastPhase?lastPhase.progress:0,Math.min(99,Math.round(p))),...d});
+  const fail=(it,c,d="")=>{it.status="failed";it.error=c;it.detail=d;emit()};
+  function register(url,cat,source,status="pending"){
+    if(seen.has(url))return null;
+    if(items.size>=o.max_files){if(!truncated){truncated=true;toast(T.note.limit_files)}return null}
+    seen.add(url);const u=new URL(url);let name=dec(u.pathname.replace(/\/$/,"").split("/").pop())||u.hostname||"index.html";
+    const it={id:String(items.size+1),url,name:name.slice(0,120),category:cat,source,status,size:0,error:"",detail:"",content_type:"",sha256:"",last_modified:"",http_status:0,cache_control:"",encoding:"",server:"",local_path:"",ext:extOf(url).slice(1),obj:""};
+    items.set(it.id,it);emit();if(status==="pending")dlQ.push(it);return it}
+  async function apply(it,f){const h=f.headers;it.content_type=(f.ct||"").split(";")[0].slice(0,80);it.http_status=f.status;it.last_modified=(h["last-modified"]||"").slice(0,60);it.cache_control=(h["cache-control"]||"").slice(0,100);it.encoding=(h["content-encoding"]||"").slice(0,20);it.server=(h.server||"").slice(0,60);it.sha256=await sha(f.buf)}
+  async function keep(it,buf){
+    if(total+buf.byteLength>MAX_TOTAL){it.status="skipped";it.error="limit_total";emit();return}
+    let rel=localRel(it.url,it.category),base=rel,n=1;
+    const conflict=r=>{const parts=r.split("/");for(let i=1;i<parts.length;i++)if(used.has(parts.slice(0,i).join("/")))return true;return dirs.has(r)};
+    while(used.has(rel)){const i=base.lastIndexOf(".");const j=base.lastIndexOf("/");rel=(i>j?base.slice(0,i):base)+"_"+n+(i>j?base.slice(i):"");n++}
+    if(conflict(rel)){const ext=(rel.match(/\.[A-Za-z0-9]{1,10}$/)||[""])[0];rel=rel.split("/")[0]+"/_"+hash8(it.url)+ext}
+    used.add(rel);const parts=rel.split("/");for(let i=1;i<parts.length;i++)dirs.add(parts.slice(0,i).join("/"));
+    const blob=new Blob([buf],{type:"application/octet-stream"});store.set(it.id,{blob,path:rel});
+    it.obj=URL.createObjectURL(blob);it.local_path=rel;it.size=buf.byteLength;it.status="done";it.error="";total+=buf.byteLength;emit()}
+
+  prog("start",2);
+  const W=getW();if(!W)throw new FErr("no_worker");
+  let first=true,info=null;const maxBytes=o.max_file_mb*1048576;
+  if(o.respect_robots){prog("robots",3);try{const b=new URL(startUrl);const f=await pget(`${b.origin}/robots.txt`,{max:512000});robots=parseRobots(new TextDecoder().decode(f.buf))}catch(e){if(e.name==="AbortError")return finish();robots=null}}
+  const rOk=u=>robotsOk(robots,u);
+
+  // --- اكتشاف الصفحات ---
+  const queue=[[startUrl,0]],queued=new Set([startUrl]),site=siteKey(startUrl);
+  while(queue.length&&pages<o.max_pages&&!cancelled()){
+    const[url,depth]=queue.shift();const isFirst=first;first=false;
+    if(!rOk(url)){if(isFirst)throw new FErr("robots");continue}
+    prog("discover",5+25*pages/o.max_pages,{n:pages+1,of:o.max_pages});
+    let f;try{await sleep(delay);f=await pget(url,{html:true,max:maxBytes})}
+    catch(e){if(e.name==="AbortError")break;const[c,d]=classify(e);if(isFirst)throw new FErr(c,d);const it=register(url,"html","link","downloading");if(it)fail(it,c,d);continue}
+    pages++;const cat=catFor(f.url,f.ct)||"html";
+    let it=register(f.url,cat,isFirst?"page":"link","downloading");if(!it&&f.url!==url)it=register(url,cat,"link","downloading");
+    if(it){await apply(it,f);await keep(it,f.buf)}
+    if(cat!=="html")continue;
+    const text=new TextDecoder("utf-8").decode(f.buf);
+    if(isFirst){try{info=analyzePage(f,text);setInfo(info);resolveIPs(info.server.host).then(ips=>{if(ips.length&&my===runId){info.server.ip=ips.join(", ");renderInfo()}})}catch(e){console.error(e)}}
+    const[res,links]=extractHtml(text,f.url);
+    for(const[u,hint]of res)register(u,hint||catFor(u)||"other",f.url);
+    for(const l of links){const lc=catFor(l);
+      if(lc===null||lc==="html"){if(siteKey(l)===site&&depth<o.max_depth&&!queued.has(l)&&queued.size<o.max_pages*3){queued.add(l);queue.push([l,depth+1])}}
+      else if(lc==="other")register(l,lc,f.url)}}
+
+  // --- التنزيل ---
+  let active=0;
+  const doDownload=async it=>{
+    if(it.status!=="pending")return;it.status="downloading";emit();
+    if(siteKey(it.url)===site&&!rOk(it.url)){it.status="skipped";it.error="robots";emit();return}
+    await sleep(delay);let f;
+    try{f=await pget(it.url,{max:maxBytes})}catch(e){if(e.name==="AbortError")return;fail(it,...classify(e));return}
+    if(it.category==="other")it.category=catFor(f.url,f.ct)||"other";
+    await apply(it,f);await keep(it,f.buf);
+    if(it.status==="done"&&it.category==="css"){for(const[u,hint]of extractCss(new TextDecoder().decode(f.buf),f.url))register(u,hint||catFor(u)||"other",it.url)}};
+  const worker=async()=>{for(;;){if(cancelled())return;const it=dlQ.shift();if(!it){if(active===0)return;await sleep(40);continue}
+    active++;try{await doDownload(it)}catch(e){if(e.name!=="AbortError")fail(it,"internal")}finally{active--}
+    const s=mkStats(),d=s.downloaded+s.failed+s.skipped;prog("download",30+65*d/Math.max(1,s.discovered),{n:d,of:s.discovered})}};
+  await Promise.all(Array.from({length:4},worker));
+
+  // --- التحليل النهائي ---
+  if(info&&!cancelled()){try{
+    const texts=[];for(const it of items.values()){if(it.status!=="done"||!["html","js","css","json"].includes(it.category))continue;const s=store.get(it.id);if(!s)continue;
+      texts.push([it.name,await s.blob.slice(0,1500000).text()]);if(texts.length>=100)break}
+    const h=new URL(startUrl).hostname;await analyzeAssets(info,h.startsWith("www.")?h.slice(4):h,texts);setInfo(info)}catch(e){console.error(e)}}
+  return finish();
+
+  function finish(){
+    const cancelledNow=ctl.signal.aborted;
+    items.forEach(it=>{if(it.status==="pending"||it.status==="downloading"){it.status="skipped";it.error="cancelled"}});
+    setStats(mkStats());
+    return{type:"done",state:cancelledNow?"cancelled":"done",error:"",note:"",stats:mkStats(),has_zip:[...items.values()].some(i=>i.status==="done"),truncated};
+  }
+}
+function setInfo(i){info=i;renderInfo()}
+
+/* ---------- التقرير / ZIP / JSON ---------- */
+function reportText(){
+  const st=stats||{discovered:0,downloaded:0,failed:0,skipped:0,size:0},L=["WEB EXTRACTOR PRO — تقرير النتائج / Results report",`URL: ${job?job.url:""}`,`Discovered: ${st.discovered} | Downloaded: ${st.downloaded} | Failed: ${st.failed} | Skipped: ${st.skipped||0}`,`Total size: ${st.size} bytes`];
+  if(info){const s=info.server,d=info.database;L.push("-".repeat(60),`Server: ${s.software||"-"} | IP: ${s.ip||"-"} | Hosting/CDN: ${s.hosting.map(h=>h.name).join(", ")||"-"}`,"Tech: "+(info.tech.map(t=>t.name).join(", ")||"-"),"Database (public refs): "+(d.found.map(x=>`${x.name} [${x.kind}]`).join(", ")||"-"),"Database (likely): "+(d.inferred.map(x=>x.name).join(", ")||"-"))}
+  L.push("-".repeat(60));files.forEach(it=>L.push(`${it.status.toUpperCase().padEnd(11)} ${it.category.padEnd(6)} ${String(it.size).padStart(10)}  ${it.url}${it.error?` [${it.error}${it.detail?": "+it.detail:""}]`:""}`));return L.join("\n")}
+function saveBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{a.remove();URL.revokeObjectURL(a.href)},4000)}
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=u=>{let c=-1;for(let i=0;i<u.length;i++)c=CRC_T[(c^u[i])&255]^(c>>>8);return(c^-1)>>>0};
+/* كاتب ZIP مدمج (بدون ضغط، بدون أي مكتبة خارجية — يعمل أوفلاين) */
+async function buildZip(entries){
+  const enc=new TextEncoder(),parts=[],cd=[],now=new Date();let off=0;
+  const dt=(((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate())&0xffff,tm=((now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1))&0xffff;
+  for(const e of entries){
+    const name=enc.encode(e.path),data=new Uint8Array(await e.blob.arrayBuffer()),crc=crc32(data),size=data.length;
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(10,tm,true);h.setUint16(12,dt,true);h.setUint32(14,crc,true);h.setUint32(18,size,true);h.setUint32(22,size,true);h.setUint16(26,name.length,true);
+    parts.push(h.buffer,name,data);
+    const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(12,tm,true);c.setUint16(14,dt,true);c.setUint32(16,crc,true);c.setUint32(20,size,true);c.setUint32(24,size,true);c.setUint16(28,name.length,true);c.setUint32(42,off,true);
+    cd.push(c.buffer,name);off+=30+name.length+size}
+  let cds=0;for(const x of cd)cds+=x.byteLength;
+  const end=new DataView(new ArrayBuffer(22));end.setUint32(0,0x06054b50,true);end.setUint16(8,entries.length,true);end.setUint16(10,entries.length,true);end.setUint32(12,cds,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...cd,end.buffer],{type:"application/zip"})}
+async function makeZip(){
+  if(!job)return;toast(T.zipping);
+  try{const entries=[...store.values()].map(s=>({path:s.path,blob:s.blob}));entries.push({path:"REPORT.txt",blob:new Blob([reportText()],{type:"text/plain"})});
+    saveBlob(await buildZip(entries),`${(new URL(job.url).hostname).replace(/\./g,"_")}_files.zip`)}catch(e){console.error(e);toast(T.zipFail)}}
+function saveJson(){if(!job)return;saveBlob(new Blob([JSON.stringify({url:job.url,info,stats,files:[...files.values()].map(({obj,...f})=>f)},null,2)],{type:"application/json"}),"analysis.json")}
+
+/* ---------- ربط الواجهة ---------- */
+function setRunning(r){running=r;if(!r){window.__paused=false;const pb=$("#pauseBtn");if(pb){pb.disabled=true;pb.querySelector("span").textContent=lang==="ar"?"إيقاف مؤقت":"Pause"}}else{const pb=$("#pauseBtn");if(pb)pb.disabled=false}$("#startBtn").disabled=r;$("#stopBtn").disabled=!r;$("#url").disabled=r}
+async function start(){
+  showErr("");
+  const raw=$("#url").value.trim();
+  if(!raw){showErr(lang==="ar"?"أدخل رابط الموقع أولاً.":"Please enter a website URL.");return}
+  if(!getW()){showErr(T.needWorker);$("#setupD").open=true;$("#setup").scrollIntoView({behavior:"smooth"});return}
+  let url;try{url=normalizeUrl(raw)}catch(e){showErr(errText(e.code));return}
+  const o={max_pages:Math.min(50,+$("#oPages").value||10),max_depth:Math.min(3,+$("#oDepth").value||0),max_files:Math.min(500,+$("#oFiles").value||200),max_file_mb:Math.min(25,+$("#oMb").value||10),respect_robots:$("#oRobots").checked};
+  job={id:"local",url};files=new Map();stats=null;filter="all";query="";$("#q").value="";open.clear();info=null;lastPhase=lastDone=null;
+  setStats({discovered:0,downloaded:0,failed:0,size:0});setPct(0);$("#phase").textContent=T.ph.start;
+  $("#run").hidden=false;$("#res").hidden=false;$("#zipBtn").classList.add("off");$("#jsonBtn").classList.add("off");
+  renderList();renderInfo();setRunning(true);
+  let ev;
+  try{ev=await run(url,o)}
+  catch(e){const c=e.code||"internal";ev={type:"done",state:"error",error:c,note:e.detail||"",stats:stats||{discovered:0,downloaded:0,failed:0,size:0},has_zip:[...files.values()].some(i=>i.status==="done"),truncated:false};console.error(e)}
+  finishUI(ev);
+}
+function finishUI(ev){
+  setRunning(false);setStats(ev.stats);setPct(100);lastDone=ev;setDoneMsg(ev);renderList();renderInfo();
+  if(ev.state==="error"){let m=errText(ev.error,ev.note);if(ev.error==="network"||ev.error==="worker")m+=" — "+T.workerHint;showErr(m)}
+  if(ev.has_zip)$("#zipBtn").classList.remove("off");
+  $("#jsonBtn").classList.remove("off");
+  let h=[];try{h=JSON.parse(sessionStorage.getItem("wep_hist")||"[]")}catch{}
+  h.unshift({url:job.url,t:new Date().toLocaleTimeString(),state:ev.state,n:ev.stats.downloaded,f:ev.stats.failed,size:ev.stats.size});
+  try{sessionStorage.setItem("wep_hist",JSON.stringify(h.slice(0,20)))}catch{}renderHist();
+}
+function renderHist(){
+  let h=[];try{h=JSON.parse(sessionStorage.getItem("wep_hist")||"[]")}catch{}
+  $("#hist").innerHTML=h.length?h.map(x=>`<div><span>${esc(x.url)}</span><span>${esc(x.t)} · ${esc(T.state[x.state]||x.state)} · ${x.n}✓ ${x.f}✗ · ${fmt(x.size)}</span></div>`).join(""):`<span>${T.noHist}</span>`;
+}
+$("#startBtn").onclick=start;
+$("#url").addEventListener("keydown",e=>{if(e.key==="Enter")start()});
+$("#stopBtn").onclick=()=>{window.__paused=false;if(ctl)ctl.abort()};
+$("#newBtn").onclick=()=>{if(ctl)ctl.abort();runId++;store.forEach(s=>{});files.forEach(f=>{if(f.obj)URL.revokeObjectURL(f.obj)});job=null;info=null;files=new Map();setRunning(false);$("#run").hidden=$("#res").hidden=true;renderInfo();showErr("");$("#url").value="";$("#url").focus();lastPhase=lastDone=null};
+$("#zipBtn").onclick=e=>{e.preventDefault();if(!$("#zipBtn").classList.contains("off"))makeZip()};
+$("#jsonBtn").onclick=e=>{e.preventDefault();if(!$("#jsonBtn").classList.contains("off"))saveJson()};
+$("#copyBtn").onclick=async()=>{if(!job)return;const t=reportText();
+  try{await navigator.clipboard.writeText(t)}catch{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}toast(T.copied)};
+
+/* ---------- إعداد الـ Worker ---------- */
+function setupInit(){
+  $("#wUrl").value=getW();
+  $("#setupD").open=!getW();
+  $("#wCopy").onclick=async()=>{const t=$("#workerSrc").textContent.trim();try{await navigator.clipboard.writeText(t)}catch{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}toast(T.wCopied)};
+  $("#wSave").onclick=async()=>{let v=$("#wUrl").value.trim().replace(/\/+$/,"");const st=$("#wStat");
+    if(v&&!/^https?:\/\//i.test(v))v="https://"+v;$("#wUrl").value=v;
+    try{localStorage.setItem(WKEY,v)}catch{}
+    if(!v){st.textContent="";return}
+    st.className="sub";st.textContent="…";
+    try{const r=await fetch(v+"/");const t=await r.text();if(r.ok&&t.includes("WEB EXTRACTOR PRO")){st.className="bd ok";st.textContent=T.wOk}else throw 0}catch{st.className="bd bad";st.textContent=T.wBad}};
+}
+
+/* ================= Live Preview: يعمل على الملفات المنزّلة فعلياً (store) ================= */
+(()=>{
+const AR=()=>lang==="ar",tx=(a,e)=>AR()?a:e;
+const MIME={html:"text/html",css:"text/css",js:"text/javascript",json:"application/json",svg:"image/svg+xml",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",gif:"image/gif",webp:"image/webp",avif:"image/avif",ico:"image/x-icon",woff:"font/woff",woff2:"font/woff2",ttf:"font/ttf",otf:"font/otf",mp4:"video/mp4",webm:"video/webm",mp3:"audio/mpeg",ogg:"audio/ogg",wav:"audio/wav"};
+let cur=null,cache=new Map(),byUrl=new Map(),logs=[];
+const strip=u=>{try{const x=new URL(u);x.hash="";return x.href}catch{return u}};
+const mimeOf=it=>{const e=(it.name.split(".").pop()||"").toLowerCase();return(it.content_type||"").split(";")[0]||MIME[e]||"application/octet-stream"};
+function index(){byUrl.clear();files.forEach(it=>{if(it.status==="done"&&store.has(it.id)){byUrl.set(strip(it.url),it);byUrl.set(strip(it.url).replace(/\/$/,""),it);byUrl.set(strip(it.url).replace(/\/$/,"")+"/",it)}})}
+const find=(ref,base)=>{try{const u=strip(new URL(ref,base).href);return byUrl.get(u)||byUrl.get(u.replace(/\/$/,""))||null}catch{return null}};
+const readBlob=(b,t)=>t?b.text():new Promise(r=>{const f=new FileReader;f.onload=()=>r(f.result);f.readAsDataURL(b)});
+const dataUri=async it=>{const b=store.get(it.id).blob,u=await readBlob(b.slice(0,b.size,mimeOf(it)),false);return u.replace(/^data:[^;]*;base64,/,"data:"+mimeOf(it)+";base64,")};
+const text=it=>store.get(it.id).blob.text();
+const miss=(w,r)=>logs.push({c:"w",m:tx("مورد غير متوفر محلياً: ","Not downloaded: ")+r+" ("+w+")"});
+async function cssRewrite(css,base,depth=0){
+  const jobs=[];let out=css;
+  const re=/url\(\s*(['"]?)([^)'"]+)\1\s*\)|@import\s+(['"])([^'"]+)\3/g,rep=[];let m;
+  while((m=re.exec(css))){const ref=m[2]||m[4];if(!ref||/^(data:|#|about:)/i.test(ref))continue;rep.push([m[0],ref,!!m[4]])}
+  for(const [full,ref,imp] of rep){const it=find(ref,base);if(!it){miss("css",ref);continue}
+    jobs.push((async()=>{if(imp&&depth<4){const t=await cssRewrite(await text(it),it.url,depth+1);out=out.split(full).join(t)}else out=out.split(full).join(`url("${await dataUri(it)}")`)})())}
+  await Promise.all(jobs);return out}
+const BRIDGE=`<script>(()=>{const p=m=>parent.postMessage(Object.assign({lp:1},m),"*");
+addEventListener("error",e=>{if(e.target&&e.target!==window&&(e.target.src||e.target.href))p({c:"e",m:"Resource failed: "+(e.target.src||e.target.href)});else p({c:"e",m:(e.message||"Error")+" @"+(e.lineno||0)})},true);
+addEventListener("unhandledrejection",e=>p({c:"e",m:"Promise: "+(e.reason&&e.reason.message||e.reason)}));
+["log","warn","error"].forEach(k=>{const o=console[k];console[k]=(...a)=>{p({c:k==="error"?"e":k==="warn"?"w":"i",m:a.map(String).join(" ")});o.apply(console,a)}});
+document.addEventListener("click",e=>{const a=e.target.closest("a[data-lp]");if(a){e.preventDefault();p({nav:a.getAttribute("data-lp")})}else{const b=e.target.closest("a[href]");if(b&&!/^(#|javascript:)/.test(b.getAttribute("href"))){e.preventDefault();p({c:"w",m:"External link blocked: "+b.href})}}},true);
+addEventListener("load",()=>p({c:"i",m:"Loaded"}))})()<\/script>`;
+async function build(it){
+  const base=it.url,doc=new DOMParser().parseFromString(await text(it),"text/html"),jobs=[];
+  doc.querySelectorAll("base").forEach(b=>b.remove());
+  const csp=document.createElement("meta");csp.httpEquiv="Content-Security-Policy";
+  if(!$("#pvNet").checked){csp.content="default-src 'unsafe-inline' 'unsafe-eval' data: blob:";doc.head.prepend(csp)}
+  doc.querySelectorAll('link[rel~="stylesheet"][href]').forEach(l=>{const f=find(l.getAttribute("href"),base);if(!f){miss("css",l.getAttribute("href"));return}
+    jobs.push((async()=>{const st=doc.createElement("style");st.textContent=await cssRewrite(await text(f),f.url);l.replaceWith(st)})())});
+  doc.querySelectorAll("style").forEach(st=>jobs.push((async()=>{st.textContent=await cssRewrite(st.textContent,base)})()));
+  doc.querySelectorAll("script[src]").forEach(sc=>{const f=find(sc.getAttribute("src"),base);if(!f){if(!$("#pvNet").checked||!/^(https?:)?\/\//.test(sc.getAttribute("src")))miss("js",sc.getAttribute("src"));return}
+    jobs.push((async()=>{const n=doc.createElement("script");[...sc.attributes].forEach(a=>{if(a.name!=="src"&&a.name!=="integrity"&&a.name!=="crossorigin")n.setAttribute(a.name,a.value)});n.textContent=(await text(f)).replace(/<\/script/gi,"<\\/script");sc.replaceWith(n)})())});
+  doc.querySelectorAll("img[src],source[src],video[src],audio[src],video[poster],link[rel~=icon][href]").forEach(el=>{
+    const at=el.hasAttribute("src")?"src":el.hasAttribute("poster")?"poster":"href",r=el.getAttribute(at),f=find(r,base);
+    if(!f){if(!/^(data:|#)/.test(r))miss("asset",r);return}jobs.push((async()=>el.setAttribute(at,await dataUri(f)))())});
+  doc.querySelectorAll("[srcset]").forEach(el=>jobs.push((async()=>{const parts=el.getAttribute("srcset").split(",").map(x=>x.trim().split(/\s+/));
+    for(const p of parts){const f=find(p[0],base);if(f)p[0]=await dataUri(f)}el.setAttribute("srcset",parts.map(p=>p.join(" ")).join(","))})()));
+  doc.querySelectorAll("[style*='url(']").forEach(el=>jobs.push((async()=>{el.setAttribute("style",await cssRewrite(el.getAttribute("style"),base))})()));
+  doc.querySelectorAll("a[href]").forEach(a=>{const h=a.getAttribute("href");if(/^(#|javascript:|mailto:|tel:)/i.test(h))return;const f=find(h,base);if(f&&f.category==="html")a.setAttribute("data-lp",f.id)});
+  await Promise.all(jobs);
+  const tmp=document.createElement("div");tmp.innerHTML=BRIDGE;doc.head.prepend(tmp.firstChild);
+  return"<!DOCTYPE html>"+doc.documentElement.outerHTML}
+function dbg(){const d=$("#pvDbg");d.innerHTML=logs.map(l=>`<div class="${l.c}">${esc(l.m)}</div>`).join("")||`<div class="i">${tx("لا أخطاء","No errors")}</div>`;d.scrollTop=1e9}
+async function load(it){
+  cur=it;logs=[];index();$("#pvSel").value=it.id;
+  try{$("#pvFrame").srcdoc=await build(it);logs.push({c:"i",m:"Built: "+it.url});srcUpd()}catch(e){logs.push({c:"e",m:String(e)})}dbg()}
+function openPv(id){
+  index();const pages=[...files.values()].filter(f=>f.category==="html"&&f.status==="done"&&store.has(f.id));
+  if(!pages.length){toast(tx("لا توجد صفحات HTML منزّلة بعد","No downloaded HTML pages yet"));return}
+  const it=(id&&files.get(id))||pages.find(f=>/(^|\/)index\.html?$/i.test(f.local_path))||pages[0];
+  $("#pvSel").innerHTML=pages.map(f=>`<option value="${esc(f.id)}">${esc(f.local_path)}</option>`).join("");
+  $("#pvNetT").textContent=tx("السماح بالموارد الخارجية","Allow external");
+  $("#pv").hidden=false;load(it)}
+window.addEventListener("message",e=>{const d=e.data;if(!d||!d.lp||e.source!==$("#pvFrame").contentWindow)return;
+  if(d.nav){const it=files.get(d.nav);if(it)load(it)}else{logs.push({c:d.c,m:d.m});dbg()}});
+$("#pvX").onclick=()=>{$("#pv").hidden=true;$("#pvFrame").srcdoc=""};
+$("#pvR").onclick=()=>cur&&load(cur);$("#pvNet").onchange=()=>cur&&load(cur);
+$("#pvSel").onchange=e=>load(files.get(e.target.value));
+$("#pvD").onclick=()=>{const d=$("#pvDbg");d.hidden=!d.hidden;dbg()};
+$("#pvF").onclick=()=>{const f=$("#pvFrame");(f.requestFullscreen||f.webkitRequestFullscreen||(()=>toast("N/A"))).call(f)};
+document.querySelectorAll(".pvbar [data-w]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".pvbar [data-w]").forEach(x=>x.classList.toggle("on",x===b));$("#pvFrame").style.width=b.dataset.w.endsWith("%")?"100%":b.dataset.w+"px"});
+$("#pvBtn").onclick=()=>openPv();window.__pv=openPv;
+const srcUpd=async()=>{if(!$("#pvSrc").hidden&&cur)$("#pvSrc").innerHTML=window.hl(await text(cur),"html")};
+$("#pvS").onclick=()=>{const p=$("#pvSrc");p.hidden=!p.hidden;$("#pvStage").classList.toggle("split",!p.hidden);srcUpd()};
+const lbl=()=>$("#pvBtnT").textContent=tx("معاينة حية","Live preview");lbl();
+const _al=applyLang;applyLang=function(){_al();lbl()};
+const _fc=fileCard;fileCard=function(f){let h=_fc(f);if(f.category==="html"&&f.status==="done")h=h.replace('<div class="fa">',`<div class="fa"><button type="button" class="sm" data-pv="${esc(f.id)}">▶ ${tx("تشغيل","Run")}</button>`);return h};
+$("#list").addEventListener("click",e=>{const b=e.target.closest("[data-pv]");if(b)openPv(b.dataset.pv)});
+})();
+
+/* ================= المشاريع المحفوظة (IndexedDB) ================= */
+(()=>{
+const tx=(a,e)=>lang==="ar"?a:e;
+const db=()=>new Promise((ok,no)=>{const r=indexedDB.open("wep_projects",1);r.onupgradeneeded=()=>r.result.createObjectStore("p",{keyPath:"id"});r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
+const tr=async(m,f)=>{const d=await db();return new Promise((ok,no)=>{const t=d.transaction("p",m),st=t.objectStore("p"),q=f(st);t.oncomplete=()=>ok(q&&q.result);t.onerror=t.onabort=()=>no(t.error)})};
+const lbl=()=>{$("#pjSave span").textContent=tx("حفظ المشروع","Save");$("#pjOpen span").textContent=tx("المشاريع","Projects");$("#pjT").textContent=tx("المشاريع المحفوظة","Saved projects")};lbl();
+const _al=applyLang;applyLang=function(){_al();lbl()};
+async function save(){
+  if(!job||![...files.values()].some(f=>f.status==="done")){toast(tx("لا توجد ملفات منزّلة للحفظ","No downloaded files to save"));return}
+  const host=new URL(job.url).hostname,name=prompt(tx("اسم المشروع:","Project name:"),host);if(!name)return;
+  const list=[...files.values()].map(({obj,...f})=>f);
+  const rec={id:"p"+Date.now(),name:name.slice(0,80),url:job.url,updated:Date.now(),size:stats?stats.size:0,count:list.filter(f=>f.status==="done").length,stats,files:list,
+    blobs:[...store.entries()].map(([id,v])=>({id,path:v.path,blob:v.blob}))};
+  try{rec.info=JSON.parse(JSON.stringify(info))}catch{rec.info=null}
+  try{await tr("readwrite",st=>st.put(rec));toast(tx("تم حفظ المشروع ✔","Project saved ✔"))}catch(e){console.error(e);toast(tx("فشل الحفظ (مساحة التخزين؟)","Save failed (storage quota?)"))}}
+async function list(){
+  let all=[];try{all=await tr("readonly",st=>st.getAll())||[]}catch{}
+  all.sort((a,b)=>b.updated-a.updated);
+  $("#pjL").innerHTML=all.length?all.map(p=>`<div class="pji"><div><b>${esc(p.name)}</b><small>${esc(p.url)}</small><small>${new Date(p.updated).toLocaleString()} · ${p.count} ${tx("ملف","files")} · ${fmt(p.size)}</small></div><div class="row"><button data-o="${p.id}" class="primary" type="button">${tx("فتح","Open")}</button><button data-x="${p.id}" class="danger" type="button">${tx("حذف","Delete")}</button></div></div>`).join(""):`<div class="sz">${tx("لا توجد مشاريع محفوظة","No saved projects")}</div>`}
+async function openP(id){
+  const p=await tr("readonly",st=>st.get(id));if(!p)return;
+  if(ctl)ctl.abort();runId++;files.forEach(f=>{if(f.obj)URL.revokeObjectURL(f.obj)});
+  store=new Map();files=new Map();
+  p.blobs.forEach(b=>store.set(b.id,{blob:b.blob,path:b.path}));
+  p.files.forEach(f=>{const it={...f};if(store.has(it.id))it.obj=URL.createObjectURL(store.get(it.id).blob);files.set(it.id,it)});
+  job={id:"local",url:p.url};info=p.info||null;stats=p.stats;filter="all";query="";$("#q").value="";open.clear();lastPhase=null;
+  $("#url").value=p.url;$("#run").hidden=false;$("#res").hidden=false;setRunning(false);setStats(p.stats);setPct(100);
+  lastDone={type:"done",state:"done",error:"",note:"",stats:p.stats,has_zip:true,truncated:false};setDoneMsg(lastDone);
+  $("#zipBtn").classList.remove("off");$("#jsonBtn").classList.remove("off");renderList();renderInfo();
+  $("#pj").hidden=true;toast(tx("تم فتح المشروع دون إعادة سحب","Opened without re-downloading"));$("#res").scrollIntoView({behavior:"smooth"})}
+$("#pjSave").onclick=save;
+$("#pjOpen").onclick=async()=>{$("#pj").hidden=false;await list()};
+$("#pjX").onclick=()=>$("#pj").hidden=true;
+$("#pjL").onclick=async e=>{const o=e.target.closest("[data-o]"),x=e.target.closest("[data-x]");
+  if(o)openP(o.dataset.o);
+  if(x&&confirm(tx("حذف المشروع؟","Delete this project?"))){await tr("readwrite",st=>st.delete(x.dataset.x));list()}};
+})();
+
+/* ================= اختبار الطلبات + شجرة الملفات ================= */
+(()=>{
+const tx=(a,e)=>lang==="ar"?a:e;
+const lbl=()=>{$("#rtT").textContent=tx("اختبار الطلبات","Request tester");
+  $("#rtD").textContent=tx("اكتب الرابط، ثم عدد الطلبات (فارغ أو 0 = مفتوح حتى تضغط إيقاف، بلا حد أعلى) والفاصل بالمللي ثانية (أقل شيء 300). تُرسل بالتتابع عبر الـ Worker (محمي من SSRF) وتتوقف تلقائياً فقط عند 429/503.","Enter URL, then request count (empty or 0 = open-ended until Stop, no upper limit) and delay in ms (min 300). Sequential via your Worker (SSRF-protected); auto-stops only on 429/503.");
+  $("#rtGoT").textContent=tx("إرسال","Send");$("#trBtn span").textContent=tx("شجرة الملفات","Tree")};lbl();
+const _al=applyLang;applyLang=function(){_al();lbl()};
+const fillSel=()=>{const o=[...files.values()].filter(f=>f.status!=="pending").slice(0,300);
+  $("#rtSel").innerHTML=`<option value="">${tx("— روابط مكتشفة —","— discovered URLs —")}</option>`+o.map(f=>`<option value="${esc(f.url)}">${esc(f.url.replace(/^https?:\/\//,"").slice(0,70))}</option>`).join("")};
+$("#rtSel").onfocus=fillSel;$("#rtSel").onchange=e=>{if(e.target.value)$("#rtUrl").value=e.target.value};
+const TXT=/(text|json|xml|javascript|svg|html|css)/i;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));let stopRt=false;
+async function one(u){const c=new AbortController(),tm=setTimeout(()=>c.abort(),20000),t0=performance.now();
+  try{const r=await fetch(`${getW()}/?url=${encodeURIComponent(u)}&max=262144`,{signal:c.signal});
+    const err=r.headers.get("x-proxy-error");if(err)throw new FErr(err,r.headers.get("x-proxy-detail")||"");
+    let meta={};try{meta=JSON.parse(decodeURIComponent(r.headers.get("x-proxy-meta")||"%7B%7D"))}catch{}
+    const buf=await r.arrayBuffer();return{meta,buf,rt:Math.round(performance.now()-t0)}}finally{clearTimeout(tm)}}
+function view(res,u){const{meta,buf,rt}=res,h=meta.headers||{},ct=h["content-type"]||"",st=meta.status||0,cls=st>=200&&st<300?"ok":st>=400?"bad":"warn";
+  const body=TXT.test(ct)&&buf.byteLength?new TextDecoder().decode(buf.slice(0,60000)):"";
+  return`<div class="row" style="margin-top:10px;align-items:center"><span class="bd ${cls}">HTTP ${st}</span><span class="sz">${meta.ms||"?"} ms (worker) · ${rt} ms (total) · ${fmt(buf.byteLength)}</span></div>
+   <table><tr><td>final_url</td><td>${esc(meta.final_url||u)}</td></tr>${(meta.chain||[]).map(x=>`<tr><td>redirect ${x.status}</td><td>${esc(x.url)}</td></tr>`).join("")}${Object.entries(h).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</table>
+   ${body?`<pre>${esc(body)}${buf.byteLength>60000?"\n…":""}</pre>`:st>=400?`<div class="sz">${tx("الخادم أعاد خطأ؛ لا يوجد محتوى.","Server returned an error; no body.")}</div>`:`<div class="sz">${tx("المحتوى ثنائي/غير نصي — لم يُعرض.","Binary/non-text body — not shown.")}</div>`}`}
+async function send(){
+  const out=$("#rtOut");let u=$("#rtUrl").value.trim();
+  if(!u){out.innerHTML=`<div class="err">${tx("أدخل رابطاً","Enter a URL")}</div>`;return}
+  try{u=normalizeUrl(u)}catch(e){out.innerHTML=`<div class="err">${esc(errText(e.code))}</div>`;return}
+  if(!getW()){showErr(T.needWorker);$("#setupD").open=true;$("#setup").scrollIntoView({behavior:"smooth"});return}
+  const raw=$("#rtN").value.trim(),n=raw===""||raw==="0"?Infinity:parseInt(raw),gap=parseInt($("#rtG").value)||1000;
+  if(!(n>=1)){out.innerHTML=`<div class="err">${tx("اكتب عدداً صحيحاً (أو اتركه فارغاً/0 = مفتوح حتى تضغط إيقاف).","Enter a whole number (or leave empty/0 = open-ended until Stop).")}</div>`;return}
+  if(gap<300||gap>60000){out.innerHTML=`<div class="err">${tx("الفاصل بين الطلبات: 300–60000 ms.","Delay between requests: 300–60000 ms.")}</div>`;return}
+  const b=$("#rtGo");b.disabled=true;stopRt=false;
+  const A={sent:0,ok:0,fail:0,min:Infinity,max:0,sum:0,st:{},errs:{}};let bad=0,why="",last=null,lastUi=0;
+  const total=n===Infinity?"∞":n;
+  const sumHtml=()=>`<table><tr><td>${tx("المرسل","sent")}</td><td>${A.sent}/${total}</td></tr><tr><td>${tx("ناجح / فاشل","ok / failed")}</td><td>${A.ok} / ${A.fail}</td></tr>${A.ok?`<tr><td>${tx("الزمن (ms)","time (ms)")}</td><td>min ${A.min} · avg ${Math.round(A.sum/A.ok)} · max ${A.max}</td></tr>`:""}<tr><td>HTTP</td><td>${Object.entries(A.st).map(([k,v])=>k+"×"+v).join(" , ")||"-"}</td></tr>${Object.keys(A.errs).length?`<tr><td>errors</td><td>${esc(Object.entries(A.errs).map(([k,v])=>k+"×"+v).join(", "))}</td></tr>`:""}</table>`;
+  const live=()=>{out.innerHTML=`<div class="row" style="margin-top:8px;align-items:center"><span class="sz">${A.sent} / ${total} …</span><button id="rtStop" type="button" class="danger">${tx("إيقاف","Stop")}</button></div>`+sumHtml();$("#rtStop").onclick=()=>stopRt=true};
+  live();
+  for(let i=0;i<n&&!stopRt;i++){
+    try{const r=await one(u);last=r;A.sent++;A.ok++;bad=0;A.min=Math.min(A.min,r.rt);A.max=Math.max(A.max,r.rt);A.sum+=r.rt;const st=r.meta.status||0;A.st[st]=(A.st[st]||0)+1;
+      if(st===429||st===503){why=tx(`توقف تلقائي: الخادم أعاد ${st} (حد معدل/ضغط) — احتراماً للموقع.`,`Auto-stopped: server returned ${st} (rate limit/overload).`);break}}
+    catch(e){A.sent++;A.fail++;bad++;const k=e.name==="AbortError"?"timeout":(e.code||"network");A.errs[k]=(A.errs[k]||0)+1;}
+    if(performance.now()-lastUi>400){live();lastUi=performance.now()}
+    if(i<n-1&&!stopRt)await sleep(gap)}
+  out.innerHTML=(why?`<div class="err">${esc(why)}</div>`:stopRt?`<div class="sz">${tx("تم الإيقاف يدوياً","Stopped manually")}</div>`:"")+sumHtml()+(last?view(last,u)+`<div class="row" style="margin-top:8px"><button id="rtCurl" type="button">${tx("نسخ كـ curl","Copy as curl")}</button></div>`:"");
+  const cb=$("#rtCurl");if(cb)cb.onclick=async()=>{try{await navigator.clipboard.writeText(`curl -i -L "${u}"`);toast(T.copied)}catch{}};
+  setTimeout(()=>b.disabled=false,1500)}
+$("#rtGo").onclick=send;$("#rtUrl").onkeydown=e=>{if(e.key==="Enter")send()};
+
+/* شجرة الملفات: تحاكي بنية الموقع وتفتح الملفات فعلياً */
+function tree(){
+  const root={d:{},f:[]};
+  files.forEach(f=>{if(f.status!=="done"||!f.local_path)return;let n=root;const p=f.local_path.split("/");p.slice(0,-1).forEach(x=>n=n.d[x]||(n.d[x]={d:{},f:[]}));n.f.push(f)});
+  const cnt=n=>n.f.length+Object.values(n.d).reduce((a,x)=>a+cnt(x),0);
+  const R=(n,top)=>Object.keys(n.d).sort().map(k=>`<details ${top?"open":""}><summary>📁 ${esc(k)} <small>(${cnt(n.d[k])})</small></summary>${R(n.d[k],false)}</details>`).join("")
+    +n.f.sort((a,b)=>a.name.localeCompare(b.name)).map(f=>`<div class="tf"><span>${f.category==="html"?"🌐":"📄"} ${esc(f.name)} <small>${fmt(f.size)}</small></span><span class="row" style="gap:4px">${f.category==="html"?`<button type="button" data-tp="${esc(f.id)}">▶</button>`:""}<a class="btn" href="${esc(f.obj||"#")}" download="${esc(f.name)}">⬇</a></span></div>`).join("");
+  return R(root,true)||`<div class="sz">${tx("لا توجد ملفات منزّلة","No downloaded files")}</div>`}
+$("#trBtn").onclick=async()=>{$("#pjT").textContent=tx("شجرة الملفات","File tree");$("#pjL").className="tr";$("#pjL").innerHTML=tree();$("#pj").hidden=false};
+$("#pjOpen").addEventListener("click",()=>{$("#pjL").className=""},true);
+$("#pjL").addEventListener("click",e=>{const b=e.target.closest("[data-tp]");if(b){$("#pj").hidden=true;window.__pv(b.dataset.tp)}});
+})();
+
+/* ================= محرر الملفات + الداشبورد + ZIP + حذف/إعادة تنزيل ================= */
+(()=>{
+const tx=(a,e)=>lang==="ar"?a:e;
+const lbl=()=>{$("#dashBtn span").textContent=tx("التحليل","Dashboard");$("#zipImp span").textContent=tx("استيراد ZIP","Import ZIP");$("#edM").textContent=$("#edT").hidden?tx("✏️ تعديل","✏️ Edit"):tx("👁 عرض","👁 View")};lbl();
+const _al=applyLang;applyLang=function(){_al();lbl()};
+function recalc(){let d=0,fl=0,sz=0;files.forEach(f=>{if(f.status==="done"){d++;sz+=f.size||0}else if(f.status==="failed")fl++});setStats({discovered:files.size,downloaded:d,failed:fl,size:sz});if(d){$("#zipBtn").classList.remove("off");$("#jsonBtn").classList.remove("off")}}
+/* --- تلوين الصياغة --- */
+const RE=/(\/\*[\s\S]*?\*\/|\/\/[^\n]*|<!--[\s\S]*?-->)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|\b(\d+\.?\d*)\b|\b(function|const|let|var|return|if|else|for|while|class|new|import|export|from|true|false|null|async|await|try|catch|switch|case|break|default|typeof|this)\b|(<\/?[a-zA-Z][\w:-]*)/g;
+window.hl=(t)=>{if(t.length>300000)return esc(t);let o="",i=0,m;RE.lastIndex=0;
+  while((m=RE.exec(t))){o+=esc(t.slice(i,m.index));const c=m[1]?"hc":m[2]?"hs":m[3]?"hn":m[4]?"hk":"ht";o+=`<span class="${c}">${esc(m[0])}</span>`;i=m.index+m[0].length}
+  return o+esc(t.slice(i))};
+const isText=f=>["html","css","js","json"].includes(f.category)||/^(text\/|application\/(json|xml))/.test(f.content_type||"")||/\.(txt|xml|csv|md|svg|webmanifest|map)$/i.test(f.name);
+/* --- المحرر --- */
+let edF=null;
+async function openEd(id){const f=files.get(id);if(!f||!store.has(id))return;
+  if(!isText(f)){toast(tx("هذا الملف غير نصي — استخدم التنزيل","Not a text file — use download"));return}
+  if(f.size>1.5e6){toast(tx("الملف كبير جداً للمحرر (>1.5MB)","File too large for editor"));return}
+  edF=f;const t=await store.get(id).blob.text();
+  $("#edN").textContent=f.name;$("#edT").value=t;$("#edT").hidden=true;$("#edV").hidden=false;$("#edV").innerHTML=hl(t);lbl();check();$("#ed").hidden=false}
+function check(){const t=$("#edT").value,e=(edF.name.split(".").pop()||"").toLowerCase();let m="";
+  if(e==="json"||e==="webmanifest"){try{JSON.parse(t);m="✔ JSON valid"}catch(x){m="✖ JSON: "+x.message}}
+  else if(e==="js"&&!/^\s*(import|export)\s/m.test(t)){try{new Function(t);m="✔ JS syntax OK (not executed)"}catch(x){m="✖ JS: "+x.message}}
+  else m=fmt(new Blob([t]).size);$("#edI").textContent=m}
+$("#edM").onclick=()=>{const T_=$("#edT"),V=$("#edV");if(T_.hidden){T_.hidden=false;V.hidden=true}else{V.innerHTML=hl(T_.value);T_.hidden=true;V.hidden=false}lbl()};
+$("#edT").oninput=check;
+$("#edF").onclick=()=>{try{$("#edT").value=JSON.stringify(JSON.parse($("#edT").value),null,2);check()}catch(x){toast("JSON: "+x.message)}};
+$("#edC").onclick=async()=>{try{await navigator.clipboard.writeText($("#edT").value);toast(T.copied)}catch{}};
+$("#edX").onclick=()=>{$("#ed").hidden=true;edF=null};
+$("#edSv").onclick=()=>{if(!edF)return;const t=$("#edT").value,old=store.get(edF.id),blob=new Blob([t],{type:"application/octet-stream"});
+  store.set(edF.id,{blob,path:old.path});if(edF.obj)URL.revokeObjectURL(edF.obj);edF.obj=URL.createObjectURL(blob);edF.size=blob.size;edF.sha256="";
+  $("#edV").innerHTML=hl(t);recalc();renderList();toast(tx("تم الحفظ — المعاينة تستخدم النسخة المعدّلة","Saved — preview uses the edited copy"))};
+/* --- حذف / إعادة تنزيل --- */
+function del(id){const f=files.get(id);if(!f||!confirm(tx("حذف هذا الملف من المشروع؟","Remove this file from the project?")))return;
+  if(f.obj)URL.revokeObjectURL(f.obj);files.delete(id);store.delete(id);recalc();renderList()}
+async function retry(id){const f=files.get(id);if(!f)return;
+  if(!getW()){showErr(T.needWorker);return}
+  ctl=new AbortController();f.status="downloading";renderList();
+  try{const r=await pget(f.url,{html:f.category==="html"}),blob=new Blob([r.buf]);
+    let rel=f.local_path||localRel(f.url,f.category);const used=new Set([...store.values()].map(v=>v.path)),base=rel;let n=1;
+    while(used.has(rel)){rel=base.replace(/(\.[^./]+)?$/,m=>"_"+n+(m||""));n++}
+    store.set(id,{blob,path:rel});f.obj=URL.createObjectURL(blob);f.local_path=rel;f.size=r.buf.byteLength;f.status="done";f.error="";f.detail="";f.http_status=r.status;f.content_type=(r.ct||"").split(";")[0];toast("✔ "+f.name)}
+  catch(e){f.status="failed";f.error=e.code||"network";f.detail=e.detail||"";toast("✖ "+errText(f.error,f.detail))}
+  recalc();renderList()}
+const _fc=fileCard;fileCard=function(f){let h=_fc(f),x="";
+  if(f.status==="done"){if(isText(f))x+=`<button type="button" class="sm" data-ed="${esc(f.id)}">✏️ ${tx("عرض/تعديل","View/Edit")}</button>`;x+=`<button type="button" class="sm danger" data-del="${esc(f.id)}">🗑</button>`}
+  else if(f.status==="failed"||f.status==="skipped")x+=`<button type="button" class="sm" data-rt="${esc(f.id)}">↻ ${tx("إعادة المحاولة","Retry")}</button><button type="button" class="sm danger" data-del="${esc(f.id)}">🗑</button>`;
+  return x?h.replace('<div class="fa">','<div class="fa">'+x):h};
+$("#list").addEventListener("click",e=>{const a=e.target.closest("[data-ed]"),d=e.target.closest("[data-del]"),r=e.target.closest("[data-rt]");
+  if(a)openEd(a.dataset.ed);if(d)del(d.dataset.del);if(r)retry(r.dataset.rt)});
+/* --- الداشبورد + التصدير --- */
+const cell=v=>{v=String(v??"");if(/^[=+\-@\t\r]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"'};
+function rows(){return[...files.values()]}
+function dash(){
+  const all=rows(),host=job?new URL(job.url).hostname.replace(/^www\./,""):"",by={};let ext=0,int=0;
+  all.forEach(f=>{const c=by[f.category]||(by[f.category]={n:0,s:0});c.n++;if(f.status==="done")c.s+=f.size||0;try{new URL(f.url).hostname.replace(/^www\./,"")===host?int++:ext++}catch{}});
+  const mx=Math.max(1,...Object.values(by).map(c=>c.s)),failed=all.filter(f=>f.status==="failed"),done=all.filter(f=>f.status==="done"),tot=done.reduce((a,f)=>a+(f.size||0),0);
+  const meta=info&&info.meta?info.meta:null;
+  $("#pjT").textContent=tx("لوحة تحليل الموقع","Website dashboard");$("#pjL").className="";
+  $("#pjL").innerHTML=!all.length?`<div class="sz">${tx("لا توجد بيانات","No data")}</div>`:
+   `<div class="stats"><div class="stat"><b>${all.filter(f=>f.category==="html"&&f.status==="done").length}</b><span>${tx("صفحات","Pages")}</span></div><div class="stat"><b>${all.length}</b><span>${tx("ملفات","Files")}</span></div><div class="stat"><b>${fmt(tot)}</b><span>${tx("الحجم","Size")}</span></div><div class="stat"><b>${failed.length}</b><span>${tx("فاشلة","Failed")}</span></div></div>
+    <h4 style="margin:12px 0 4px">${tx("حسب النوع (الحجم)","By type (size)")}</h4>${Object.entries(by).sort((a,b)=>b[1].s-a[1].s).map(([k,c])=>`<div class="dbar"><b>${esc(k)}</b><i style="width:${Math.max(2,Math.round(c.s/mx*55))}%"></i><span>${c.n} · ${fmt(c.s)}</span></div>`).join("")}
+    <div class="sz" style="margin-top:8px">${tx("داخلية","Internal")}: ${int} · ${tx("خارجية","External")}: ${ext}</div>
+    ${failed.length?`<h4 style="margin:12px 0 4px">${tx("الموارد الفاشلة","Failed resources")}</h4>${failed.slice(0,30).map(f=>`<div class="sz" style="direction:ltr;text-align:left;word-break:break-all">✖ ${esc(f.url)} — ${esc(f.error)}</div>`).join("")}`:""}
+    <div class="row" style="margin-top:14px"><button data-ex="csv" type="button">CSV</button><button data-ex="html" type="button">HTML</button><button data-ex="json" type="button">JSON</button></div>`;
+  $("#pj").hidden=false}
+$("#dashBtn").onclick=dash;
+$("#pjL").addEventListener("click",e=>{const b=e.target.closest("[data-ex]");if(!b)return;const k=b.dataset.ex,all=rows(),name=(job?new URL(job.url).hostname:"site").replace(/\./g,"_");
+  if(k==="json")return saveJson();
+  if(k==="csv"){const H=["url","path","category","status","http_status","content_type","size","error"];
+    saveBlob(new Blob(["\ufeff"+[H.join(","),...all.map(f=>[f.url,f.local_path,f.category,f.status,f.http_status,f.content_type,f.size,f.error].map(cell).join(","))].join("\r\n")],{type:"text/csv"}),name+"_report.csv")}
+  else saveBlob(new Blob([`<!DOCTYPE html><meta charset="utf-8"><title>Report</title><style>body{font:14px system-ui;padding:16px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:4px 6px;text-align:left;word-break:break-all}</style><h2>${esc(job?job.url:"")}</h2><p>${all.length} files · ${fmt(all.reduce((a,f)=>a+(f.status==="done"?f.size||0:0),0))}</p><table><tr><th>URL</th><th>Type</th><th>Status</th><th>Size</th><th>Error</th></tr>${all.map(f=>`<tr><td>${esc(f.url)}</td><td>${esc(f.category)}</td><td>${esc(f.status)}</td><td>${f.size||0}</td><td>${esc(f.error)}</td></tr>`).join("")}</table>`],{type:"text/html"}),name+"_report.html")});
+/* --- استيراد ZIP (مع التحقق من المسارات) --- */
+const safe=p=>{p=p.replace(/\\/g,"/");if(!p||p.startsWith("/")||/^[a-z]:/i.test(p)||p.split("/").some(x=>x===".."))return null;return p.replace(/^\.\//,"")};
+async function inflate(u8){const ds=new DecompressionStream("deflate-raw"),w=ds.writable.getWriter();w.write(u8);w.close();return new Uint8Array(await new Response(ds.readable).arrayBuffer())}
+async function importZip(file){
+  try{const buf=new Uint8Array(await file.arrayBuffer()),dv=new DataView(buf.buffer);let e=-1;
+    for(let i=buf.length-22;i>=Math.max(0,buf.length-65600);i--)if(dv.getUint32(i,true)===0x06054b50){e=i;break}
+    if(e<0)throw new Error("not a zip");
+    const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true),skipped=0,added=0,total=0;
+    if(n>2000)throw new Error("too many entries");
+    if(!job)job={id:"local",url:"https://zip.local/"};
+    if(ctl)ctl.abort();
+    const dec=new TextDecoder();let idn=files.size;
+    for(let i=0;i<n;i++){
+      if(dv.getUint32(p,true)!==0x02014b50)break;
+      const meth=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),us=dv.getUint32(p+24,true),nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+      const name=dec.decode(buf.slice(p+46,p+46+nl));p+=46+nl+el+cl;
+      if(name.endsWith("/"))continue;
+      const path=safe(name);if(!path||us>5e7||(total+=us)>1.5e8){skipped++;continue}
+      const ln=dv.getUint16(lo+26,true),le=dv.getUint16(lo+28,true),raw=buf.slice(lo+30+ln+le,lo+30+ln+le+cs);
+      let data;try{data=meth===0?raw:meth===8?await inflate(raw):null}catch{data=null}
+      if(!data){skipped++;continue}
+      const url="https://zip.local/"+path.split("/").map(encodeURIComponent).join("/"),id="z"+(++idn),blob=new Blob([data]);
+      const it={id,url,name:path.split("/").pop(),category:catFor(url)||"other",source:"zip",status:"done",size:data.length,error:"",detail:"",content_type:"",sha256:"",last_modified:"",http_status:200,cache_control:"",encoding:"",server:"",local_path:path,obj:URL.createObjectURL(blob)};
+      files.set(id,it);store.set(id,{blob,path});added++}
+    $("#run").hidden=false;$("#res").hidden=false;setRunning(false);recalc();setPct(100);renderList();
+    toast(tx(`تم استيراد ${added} ملف`+(skipped?` (تخطّي ${skipped} غير آمن/غير مدعوم)`:""),`Imported ${added} files`+(skipped?` (${skipped} skipped)`:"")))
+  }catch(x){toast(tx("فشل فتح ZIP: ","ZIP failed: ")+x.message)}}
+$("#zipImp").onclick=()=>$("#zipIn").click();
+$("#zipIn").onchange=e=>{const f=e.target.files[0];e.target.value="";if(f)importZip(f)};
+})();
+
+/* ================= إيقاف مؤقت/استئناف + إعادة كل الفاشلة ================= */
+(()=>{
+const tx=(a,e)=>lang==="ar"?a:e;
+const pl=()=>{const pb=$("#pauseBtn");pb.querySelector("span").textContent=window.__paused?tx("استئناف","Resume"):tx("إيقاف مؤقت","Pause");pb.firstChild.textContent=window.__paused?"▶ ":"⏸ ";$("#rtAll span").textContent=tx("إعادة كل الفاشلة","Retry all failed")};pl();
+const _al=applyLang;applyLang=function(){_al();pl()};
+$("#pauseBtn").onclick=()=>{window.__paused=!window.__paused;pl();toast(window.__paused?tx("تم الإيقاف المؤقت — الطلبات الجارية تكتمل ثم ينتظر","Paused — in-flight requests finish, then it waits"):tx("تم الاستئناف","Resumed"))};
+let busy=false;
+$("#rtAll").onclick=async()=>{if(busy||running)return;const ids=[...files.values()].filter(f=>f.status==="failed").map(f=>f.id);
+  if(!ids.length){toast(tx("لا توجد ملفات فاشلة","No failed files"));return}
+  busy=true;$("#rtAll").disabled=true;let ok=0;
+  for(const id of ids){const b=document.querySelector(`[data-rt="${id}"]`);if(b){b.click();await new Promise(r=>{const t=setInterval(()=>{const f=files.get(id);if(!f||f.status!=="downloading"){clearInterval(t);r()}},150)})}await new Promise(r=>setTimeout(r,300));if(files.get(id)&&files.get(id).status==="done")ok++}
+  busy=false;$("#rtAll").disabled=false;toast(tx(`نجحت إعادة ${ok} من ${ids.length}`,`Recovered ${ok} of ${ids.length}`))};
+})();
+
+setupInit();
+applyLang();
+</script>
+</body>
+</html>
